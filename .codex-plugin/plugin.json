@@ -1,6 +1,6 @@
 {
   "name": "ai-skill",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Build model-powered behavior: agents, retrieval, evals, and guardrails",
   "author": {
     "name": "gabros20",
@@ -9,17 +9,30 @@
   "homepage": "https://ai-skill.vercel.app",
   "repository": "https://github.com/gabros20/ai-skill",
   "license": "MIT",
-  "keywords": ["agent-skill", "ai"],
+  "keywords": [
+    "agent-skill",
+    "ai",
+    "llm",
+    "agents",
+    "rag",
+    "evals",
+    "mcp",
+    "prompt-engineering",
+    "context-engineering",
+    "guardrails"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "AI Systems",
     "shortDescription": "Build model-powered behavior: agents, retrieval, evals, and guardrails",
-    "longDescription": "Build model-powered behavior: agents, retrieval, evals, and guardrails",
+    "longDescription": "A faceted router for building the model-powered behavior of a product across chat, autonomous-agent, RAG, batch, and multi-agent systems — provider- and language-agnostic. Ten primary jobs (model selection & routing, prompt/context engineering, structured outputs, tools/MCP, agent construction, retrieval/RAG, memory, evaluation, guardrails, cost/observability) reshaped by five deployment surfaces. Evaluation is the flagship. The through-line is verify-and-subtract, not just assemble: prune the harness, budget tokens, decompose the judge, distrust benchmarks, prove retrieval, and know when not to multi-agent. Anti-staleness is enforced — every model, price, version, and spec fact is date-stamped and re-verified against the live source.",
     "developerName": "gabros20",
-    "category": "Productivity",
+    "category": "Developer Tools",
     "capabilities": [],
     "defaultPrompt": [
-      "Use $ai to TODO: provide one short starter request."
+      "Use $ai to add login-with-Google and build the agent that answers questions over our docs.",
+      "Use $ai to write evals and an LLM judge for our support assistant.",
+      "Use $ai to pick and route between models to cut our token cost."
     ],
     "brandColor": "#7c3aed"
   }

@@ -1,0 +1,79 @@
+# ai → quality/operate/backend/frontend/data handoff envelope
+# Fill every field for a real run; delete these comments once filled.
+# Only `objective` is required — every other field may be empty; a consumer must tolerate it
+# absent, never treat absence as a schema violation. See references/handoff.md for field-by-field
+# meaning and the seam discipline (this file is a routing index, never a copy of the real
+# harness/eval-suite/config).
+
+handoff_version: 1
+skill: ai
+status: complete              # complete | partial | blocked — see references/handoff.md
+
+objective: ""                  # one sentence: what this ai build's cognition does (surface + job)
+
+inputs_used:
+  - path: ""                    # e.g. artifacts/architecture-handoff.yaml, artifacts/backend-contracts.md
+    type: ""                    # e.g. nfr-budgets, threat-model, tool-contract, dataset-schema
+    owner: architecture
+
+artifacts_created:
+  - path: ""
+    type: harness                       # system prompt, tools available, context-management policy
+    owner: ai
+  - path: ""
+    type: eval-suite                    # offline/regression/online eval definitions + results
+    owner: ai
+  - path: ""
+    type: model-config                  # model/tier picks, routing cascade, fallback chain, effort defaults
+    owner: ai
+  - path: ""
+    type: tool-contract                 # the tool/MCP schema the agent expects backend to serve (if any)
+    owner: ai
+  - path: ""
+    type: retrieval-config              # chunking/fusion/rerank config + vector-store assumptions (if RAG)
+    owner: ai
+
+decisions: []                    # material calls made and why — e.g. "chose cascade-with-verifier
+                                   # over static task-kind table: task mix too heterogeneous for a
+                                   # fixed map"
+
+assumptions: []                   # unvalidated claims the harness/eval rests on — mirror any
+                                   # assumption recorded during the build, don't re-derive here
+
+constraints: []                   # hard limits respected: latency/cost budgets, model/SDK version
+                                   # pins, self-host vs hosted-API constraint
+
+risks: []                          # pointers into a risk-register by id, or new risks surfaced
+                                    # during the build — never inline a full register here
+
+unresolved:
+  - owner: ""                      # every open question needs a named owner — an orphaned question
+    question: ""                   # with no owner never gets answered
+
+validation:
+  performed: []                     # e.g. "offline eval suite passing at pass^3", "guardrail
+                                      # self-verification pass completed", "tool contract diffed
+                                      # against backend's actual endpoint schema"
+  remaining: []                     # e.g. "quality's independent red-team pass not yet run",
+                                      # "online eval not yet live"
+
+threat_model_border:
+  controls_implemented_by_ai: []        # guardrails/approval-gates ai implemented here
+  controls_for_quality_to_verify: []    # controls quality must verify independently, not assume covered
+
+volatile_facts:
+  - fact: ""                       # e.g. "Claude Opus 5 pricing", "MCP spec revision"
+    as_of: ""                      # date stamp
+    reverify_at: ""                # e.g. "platform.claude.com/docs/en/about-claude/models/overview"
+
+recommended_next:
+  - skill: quality
+    reason: ""
+  - skill: operate
+    reason: ""
+  - skill: backend
+    reason: ""
+  - skill: frontend
+    reason: ""
+  - skill: data
+    reason: ""

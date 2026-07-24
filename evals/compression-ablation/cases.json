@@ -1,8 +1,26 @@
 [
   {
-    "id": "representative-ablation",
-    "prompt": "TODO: add a request that exercises a load-bearing instruction.",
+    "id": "anti-staleness-model-fact",
+    "prompt": "Which model should we use and what will it cost per million tokens?",
     "variants": ["no-skill", "current", "compressed-candidate"],
-    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"]
+    "preserve": ["date-stamps the model name and price", "instructs re-verification against the live source", "does not present a memorized model/price as frozen fact"]
+  },
+  {
+    "id": "verify-and-subtract-harness",
+    "prompt": "Our agent keeps getting worse as we add tools and prompt text. What should we do?",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["recommends pruning/removing, not only adding", "names harness-hygiene / regression on model upgrade", "caps decisions at 3-5"]
+  },
+  {
+    "id": "evals-are-the-gate",
+    "prompt": "The agent looks good in a few manual tries — are we done?",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["requires an eval run, not an assertion of 'works'", "distinguishes this from quality's independent gate", "mentions pass^k for reliability"]
+  },
+  {
+    "id": "when-not-to-multi-agent",
+    "prompt": "Let's build a swarm of agents that collaborate on writing the whole feature.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["weighs the when-NOT-to-multi-agent case (coordination cost, token multiplier, shared-state coupling)", "offers the single-threaded / orchestrator+scoped-specialists alternative", "does not default to a swarm"]
   }
 ]

@@ -1,8 +1,56 @@
 [
   {
-    "id": "primary-route",
-    "prompt": "TODO: add a request that selects one reference.",
-    "expected_references": ["references/example.md"],
+    "id": "model-selection-routing",
+    "prompt": "Pick and route between models to cut token cost, with fallback when a provider errors.",
+    "expected_references": ["references/model-selection-and-routing.md"],
+    "forbidden_references": ["references/evaluation.md"]
+  },
+  {
+    "id": "context-harness-prune",
+    "prompt": "Our agent's context window is bloated and slow — help me prune the harness before we add more.",
+    "expected_references": ["references/prompt-and-context-engineering.md"],
     "forbidden_references": []
+  },
+  {
+    "id": "agent-loop-with-tools",
+    "prompt": "Build an agent loop with tools that retries when the model produces a bad tool call.",
+    "expected_references": ["references/agent-construction.md"],
+    "forbidden_references": []
+  },
+  {
+    "id": "rag-chunk-hybrid-rerank",
+    "prompt": "Add deliberate chunking, hybrid search, and reranking to our RAG pipeline.",
+    "expected_references": ["references/retrieval-and-rag.md"],
+    "forbidden_references": []
+  },
+  {
+    "id": "evaluation-judge-dataset",
+    "prompt": "Build a labeled eval dataset and an aligned LLM judge for our assistant.",
+    "expected_references": ["references/evaluation.md"],
+    "forbidden_references": []
+  },
+  {
+    "id": "additive-multiagent-on-rag",
+    "prompt": "Build a knowledge assistant over our docs that also orchestrates several specialist sub-agents.",
+    "expected_references": ["references/surface-rag-app.md", "references/surface-multi-agent.md"],
+    "forbidden_references": []
+  },
+  {
+    "id": "guardrails-moderation",
+    "prompt": "Add moderation, an input rail, and an approval gate to our agent.",
+    "expected_references": ["references/guardrails-and-safety.md"],
+    "forbidden_references": []
+  },
+  {
+    "id": "observability-cost-traces",
+    "prompt": "Instrument our LLM app with traces and token/cost/cache tracking.",
+    "expected_references": ["references/observability-and-cost.md"],
+    "forbidden_references": []
+  },
+  {
+    "id": "decline-to-architecture",
+    "prompt": "Design the threat model and system boundaries for our agent platform.",
+    "expected_references": [],
+    "forbidden_references": ["references/agent-construction.md", "references/surface-autonomous-agent.md"]
   }
 ]

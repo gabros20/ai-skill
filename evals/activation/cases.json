@@ -1,12 +1,52 @@
 [
   {
-    "id": "positive-explicit",
-    "prompt": "Use $ai to TODO: add a realistic in-scope request.",
+    "id": "positive-agent-plus-evals",
+    "prompt": "Use $ai to build an agent that answers questions over our docs, then prove it works with evals.",
     "should_trigger": true
   },
   {
-    "id": "negative-near-miss",
-    "prompt": "TODO: add a realistic request owned by the closest neighboring skill.",
+    "id": "positive-model-routing-cost",
+    "prompt": "We're spending too much on the flagship model — route cheaper tiers for classification and only escalate when needed.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-rag-citations",
+    "prompt": "Add retrieval so our assistant answers from our knowledge base with grounded citations.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-llm-judge",
+    "prompt": "Write an LLM-as-a-judge and a regression suite for our support bot.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-guardrails",
+    "prompt": "Add moderation and safety rails so our chatbot refuses malicious prompts.",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-architecture-threat-model",
+    "prompt": "Decide the overall system boundaries, NFR budgets, and threat model for our new AI platform.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-backend-mcp-hosting",
+    "prompt": "Host, authenticate, and scale an MCP server for our team to call in production.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-frontend-chat-ui",
+    "prompt": "Build the streaming chat UI with message bubbles and a typing indicator.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-data-pipeline",
+    "prompt": "Set up the ETL pipeline that loads our events into the warehouse and governs the vector store as a dataset.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-quality-independent-gate",
+    "prompt": "Independently red-team and sign off our model as a release gate before we ship.",
     "should_trigger": false
   }
 ]

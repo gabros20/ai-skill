@@ -1,6 +1,6 @@
 interface:
   display_name: "AI Systems"
-  short_description: "Build model-powered behavior: agents, retrieval, evals, and guardrails"
-  default_prompt: "Use $ai to TODO: provide one short, realistic starting request."
+  short_description: "Build model-powered behavior: agents, RAG, evals, guardrails"
+  default_prompt: "Use $ai to build an agent that answers questions over our docs, then write evals to prove it works."
 policy:
   allow_implicit_invocation: true

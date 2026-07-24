@@ -1,10 +1,69 @@
 [
   {
-    "id": "primary-artifact",
-    "prompt": "TODO: add a representative execution request.",
+    "id": "model-routing-with-cost-and-license",
+    "prompt": "We run one flagship model for everything and the bill is too high. Recommend a routing setup.",
     "assertions": [
-      "TODO: name an observable artifact requirement",
-      "TODO: name an objective validation or completion requirement"
+      "Proposes a routing cascade (cheap tier for classification/extraction, escalate to the flagship only when needed) and names it as the highest-leverage cost lever, ahead of caching/batching",
+      "Any model name or per-token price is date-stamped (e.g. 'as of 2026-07-25') with an instruction to re-verify against the live pricing page — never presented as a frozen fact",
+      "Fallback is designed to degrade honestly (a stated fallback order, never a silent downgrade and never a bare hard error)",
+      "If open-weight/self-host is raised, distinguishes 'open weights' from 'open-source license' (e.g. Llama's restricted Community License vs MIT/Apache families)",
+      "Treats the serving gateway/substrate as referenced infra (backend/operate), not something this pass builds"
+    ]
+  },
+  {
+    "id": "agent-construction-shape-first",
+    "prompt": "Build an agent that triages incoming support tickets and takes an action on each.",
+    "assertions": [
+      "Names the control-flow shape explicitly (a workflow pattern such as routing/orchestrator-workers, or 'autonomous agent' with the reason steps can't be predefined) rather than defaulting to 'agent'",
+      "Tool contract is typed schema + validate-and-retry-on-failure, with the exposed schema matching execution-side validation",
+      "If multi-agent is considered, the when-NOT-to case is weighed (coordination cost / ~15x token multiplier) before choosing it",
+      "If the loop can outlive one request or has non-idempotent side effects, a durable-execution decision is stated with the option's license flag surfaced (e.g. Inngest SSPL / Restate BSL)",
+      "The framework pick names what NOT to build, and any legacy framework (AutoGen, Semantic Kernel) is cited as pattern-origin only",
+      "Completion is gated on an eval, not asserted"
+    ]
+  },
+  {
+    "id": "evaluation-build-a-judge",
+    "prompt": "Our assistant 'feels worse' since we changed the prompt. Set up evals so we actually know.",
+    "assertions": [
+      "Starts with error analysis on real traces (open → axial coding to a failure taxonomy), not a metrics dashboard or generic benchmark",
+      "Judge is binary pass/fail and built via critique-shadowing; alignment is reported as precision/recall against a human-labeled holdout, not raw agreement",
+      "Names a harness shape (assertion-matrix / test-as-code / Task-Solver-Scorer) appropriate to the system, and assigns suite types (offline/online/regression/safety)",
+      "Reliability is reported as pass^k where the user can't silently retry, not pass@k",
+      "Does not rest a ship decision on a public benchmark score"
+    ]
+  },
+  {
+    "id": "rag-pipeline-grounded",
+    "prompt": "Make our doc assistant answer from our content with citations and stop hallucinating.",
+    "assertions": [
+      "Proposes the staged pipeline: deliberate chunking (contextual or late) → hybrid retrieve fused with RRF → cross-encoder rerank → agentic decomposition only if measured need",
+      "Evaluates retrieval and generation separately (context precision/recall vs faithfulness), pointing to the RAG-metric vocabulary rather than one blended score",
+      "Recommends a vector store by decision (pgvector default when already on Postgres; graduate to a dedicated store for scale) rather than defaulting to one",
+      "Citations/grounding are treated as a structured contract and cite-or-retract is named as the load-bearing guardrail for this surface",
+      "Vector-store-as-served-infra is left to backend and vector-store-as-governed-dataset to data (retrieval behavior is owned here)"
+    ]
+  },
+  {
+    "id": "guardrails-controls-table",
+    "prompt": "Harden our public chatbot against prompt injection and unsafe output.",
+    "assertions": [
+      "Output is a uniform controls table (control → implementation → verified) with a self-audit count, not a narrative",
+      "Covers more than one archetype from the taxonomy (structural rail / validator / classifier moderation / code-exec guard / approval gate), matched to the risk",
+      "Treats classifier moderation as a signal, not a sole blocker, and names prompt self-verification (cite-or-retract) as the cheap first layer",
+      "Proposes validating the guardrail itself (false-positive/false-negative rate against an adversarial labeled set), the same discipline as judge alignment",
+      "Independent pre-ship red-team as a release gate is routed to quality; deploy/monitoring of the guard service to operate"
+    ]
+  },
+  {
+    "id": "structured-output-mechanism-choice",
+    "prompt": "Our tool calls sometimes come back as malformed JSON and break the pipeline. Fix it.",
+    "assertions": [
+      "Chooses among the three mechanisms with a reason (constrained decoding vs reask/retry vs provider-native strict), not one by default",
+      "Uses a schema-first contract (Zod/Pydantic) as the single source, and does not hand-roll regex parsing",
+      "Does not reach for constrained-decoding infrastructure when the deployment is a hosted API without logit access",
+      "Distinguishes schema conformance from content correctness (the latter is an eval concern)",
+      "Any provider-specific field/flag name is date-stamped with a re-verify note"
     ]
   }
 ]
