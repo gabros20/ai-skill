@@ -16,7 +16,8 @@ export const themes = {
     bad: "#b3403a",
     codeBg: "#eef1f7",
     glyph: "#8391ad",
-    dim: "#8146c9", // the "structure/dimension" violet (--tok-dim)
+    dim: "#8146c9", // the "structure/dimension" violet
+    multi: "#0e8f9c", // additive multi-agent overlay — distinct teal, mirrors site --tok-dim
     // wireframe-gray fill: a touch flatter than codeBg so the designed→undesigned jump reads
     wire: "#e7eaf1",
   },
@@ -35,6 +36,7 @@ export const themes = {
     codeBg: "#141824",
     glyph: "#5d6a85",
     dim: "#b98aef",
+    multi: "#4fd1de", // additive multi-agent overlay — distinct teal, mirrors site --tok-dim
     wire: "#202634",
   },
 } as const;

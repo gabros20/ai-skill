@@ -1,30 +1,65 @@
 # ai
 
-> Build model-powered behavior: agents, retrieval, evals, and guardrails. Installs as an agent skill.
+> Build the model-powered behavior of a product — model selection & routing, prompt/context
+> engineering, structured outputs, tools/MCP, agent construction, retrieval/RAG, memory, evaluation,
+> guardrails, and cost/observability — across chat, autonomous-agent, RAG, batch, and multi-agent
+> surfaces, any provider or language. The intelligence layer of the Build stage. Installs as an agent skill.
 
-TODO — one paragraph: what problem this replaces, the workflow it runs (stages/strategies, in
-order), and what "read only what you need" the router gives you. Claude Code is the reference
-host; it's plain Agent Skills format (agentskills.io), so it installs on Codex, Cursor,
-Antigravity, opencode, Grok Build, and Hermes too.
+Ask an agent to "add AI" and it wires a single SDK call to a model it named from memory — no eval, no
+guardrail, a price quote three months stale. ai builds the model-powered behavior instead, owning the
+cognition (not the substrate it runs on). It is a faceted router, not a fixed pipeline: before quoting
+any model name, price, version, or spec revision — or generating any provider-specific code — it
+re-verifies the fact against the live source (retrieval-first / anti-staleness, because this layer
+churns monthly), then each request selects one primary job (model-selection-and-routing ·
+prompt-and-context-engineering · structured-outputs · tool-and-mcp-integration · agent-construction ·
+retrieval-and-rag · memory · evaluation ⭐ · guardrails-and-safety · observability-and-cost) combined
+with at most one base surface (chat-assistant · autonomous-agent · rag-app · batch-and-pipeline) — plus
+the additive surface-multi-agent overlay when the system is also multi-agent. Only the two or three
+references a route needs are read, never the whole pack. Three stances make it distinct: evaluation is
+the flagship — the completion gate (error-analysis-first dataset, aligned binary judge, pass^k), not an
+afterthought; it verifies-and-subtracts — prune the harness, budget tokens, decompose the judge,
+distrust benchmarks, decide when NOT to multi-agent (the field is loud on adding, silent on pruning);
+and anti-staleness is a first-class value-add — every volatile fact is date-stamped and re-verified,
+plus "open ≠ open-source" (restricted weights licenses vs MIT/Apache, and the BSL/SSPL/ELv2/open-core
+source-available cluster). Claude Code is the reference host; it's plain Agent Skills format
+(agentskills.io), so it installs on Codex, Cursor, Antigravity, opencode, Grok Build, and Hermes too.
 
 ## Install
 
-- npm/skills.sh: `npx skills add gabros20/ai-skill`
+- npm/skills.sh: `npx skills add gabros20/ai-skill -g -y`
 - Clone + installer (per-host targets: claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all): `git clone https://github.com/gabros20/ai-skill && cd ai-skill && ./install.sh codex`
 - Manual copy: `cp -R skills/ai ~/.claude/skills/ai`
 
 ## Docs
 
 - [README.md](https://raw.githubusercontent.com/gabros20/ai-skill/main/README.md): overview, install, workflow, and repository map.
-- [skills/ai/SKILL.md](https://raw.githubusercontent.com/gabros20/ai-skill/main/skills/ai/SKILL.md): runtime router, workflow, artifact contract, and completion rules.
+- [skills/ai/SKILL.md](https://raw.githubusercontent.com/gabros20/ai-skill/main/skills/ai/SKILL.md): runtime router, invariants, artifact contract, and completion rules.
 - [docs/installation.md](https://raw.githubusercontent.com/gabros20/ai-skill/main/docs/installation.md): installation and verification by client.
 - [docs/usage.md](https://raw.githubusercontent.com/gabros20/ai-skill/main/docs/usage.md): activation boundary, routes, outputs, and completion.
 - [docs/recipes.md](https://raw.githubusercontent.com/gabros20/ai-skill/main/docs/recipes.md): representative starting prompts.
 
 ## Reference inventory (`skills/ai/references/`)
 
-- `example.md` — TODO: what job this reference answers.
+Primary jobs (pick one):
+- `model-selection-and-routing.md` — pick/route a model or provider, cost/latency/effort budget, fallback/degradation, open-vs-closed / self-host; price-per-intelligence, routing cascade (the #1 cost lever), "open ≠ open-source" license read.
+- `prompt-and-context-engineering.md` — the prompt/context harness: attention budget, JIT retrieval, compaction, note-taking, progressive disclosure; whole-token-budget curation, Model/Harness/Agent framing, prune-before-add discipline.
+- `structured-outputs.md` — typed/structured output and conformant tool arguments; schema-first (Zod/Pydantic), the three enforcement mechanisms (constrained-decoding vs reask/retry vs provider-native) and when each.
+- `tool-and-mcp-integration.md` — design/consume tool calls, integrate MCP, decide direct-API vs CLI vs MCP; typed tool contract + validate-retry, MCP anatomy + build chain (spec → SDK pin-v1 → FastMCP → registry).
+- `agent-construction.md` — the agent loop, termination, multi-agent shape, durability decision, framework pick; workflow-vs-agent, four multi-agent shapes + when-NOT, durable-execution + license flag.
+- `retrieval-and-rag.md` — retrieval/RAG behavior: contextual/late chunking → hybrid + RRF → rerank → agentic decomposition → eval separately; pgvector-default vector-store decision.
+- `memory.md` — durable memory across turns/sessions: short-vs-long-term split, four philosophies (fact-store / temporal-KG / self-editing / ontology) as options, benchmark-subordinated recall eval.
+- `evaluation.md` — FLAGSHIP: prove the system works — dataset (error-analysis-first taxonomy), aligned judge (Critique-Shadowing + jury), three harness shapes, offline/online/regression/safety, pass^k. The completion gate, not an afterthought.
+- `guardrails-and-safety.md` — moderation, rails, validators, code-exec guards, approval gates, red-team; uniform 5-way controls table (control→impl→verified) + self-audit, validate-the-guardrail-like-a-judge.
+- `observability-and-cost.md` — AI cost + behavior telemetry: OTel-GenAI `gen_ai.*` semconv (vendor-neutral), cache-as-architecture, cost-lever ordering (cascade→cache→batch), license-pattern read.
 
-## Optional
+Surface overlays (add at most one base; surface-multi-agent is additive):
+- `surface-chat-assistant.md` — default / start-simplest: streaming, conversational, human-in-loop; single-call-before-loop default, session-scoped memory, online-eval fit, lighter guardrail posture.
+- `surface-autonomous-agent.md` — long-horizon loop, tools, runs unattended; compaction/JIT/note-taking/sub-agent isolation as structural, harness-hygiene on every model upgrade, approval-gate default, durable-execution border, pass^k.
+- `surface-rag-app.md` — retrieval-centric, grounded, citation-bearing; retrieval-and-rag is the spine, citations as a schema contract, cite-or-retract as the load-bearing guardrail, index-staleness as a monitored failure.
+- `surface-batch-and-pipeline.md` — offline classify/extract at scale, no human in loop; cheap-tier routing default, cost-lever ordering (cascade→batch-50%→cache→effort-floor), schema-heavy output, offline/regression eval only.
+- `surface-multi-agent.md` — FLAGSHIP, additive: orchestrated specialists on top of a base shape (not swarms) — orchestrator + tool-scoped specialists, the honest when-NOT-to-multi-agent (coordination cost, ~15× tokens), four shapes, per-base composition. Stacks on, does not replace.
 
-- [Visual guide](https://ai-skill.vercel.app): the workflow, boundaries, and reference map on one page.
+Pipeline:
+- `handoff.md` — standalone vs pipeline behavior and the `handoff.yaml` companion (with `volatile_facts`) consumed by quality, operate, backend, frontend, and data.
+
+Assets (`skills/ai/assets/`): model-selection-scorecard.md · context-budget-worksheet.md · agent-loop-and-tool-contract-checklist.md · rag-pipeline-checklist.md · eval-harness-starter.md · llm-judge-rubric-template.md · guardrails-controls-checklist.md · otel-genai-observability-checklist.md · handoff.yaml.
