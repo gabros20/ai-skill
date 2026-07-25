@@ -1,37 +1,60 @@
-# Agent guide — creating an independent skill repository
+# Agent guide — `ai` (AI Systems)
 
-This repository is the source template for one `<skill>-skill` repository. The runtime skill name
-remains short and lives under `skills/<skill>/`; repository and plugin names use the `-skill`
-suffix. Work [TEMPLATE-CHECKLIST.md](TEMPLATE-CHECKLIST.md) top to bottom after initialization.
+This repository is the released `ai-skill`: an installable agent skill for building the model-powered
+behavior of a product. The runtime skill lives under `skills/ai/`; the repository and Codex plugin
+use the `-skill` suffix. Read this before editing.
 
-## Detect state first
+## Ownership boundary (non-negotiable)
 
-- `skills/ai/` exists in the actual `gabros20/skill-template` repository: maintain the
-  source template and run `scripts/check-sync` to exercise the initializer regression test.
-- `skills/ai/` exists anywhere else: stop and run `scripts/init`; the gate must fail
-  until this happens.
-- `skills/<real-name>/` exists with the checklist: populate and validate the derived repository.
-- No checklist: treat it as an ordinary released skill repository and follow its local README.
+`ai` owns **behavior whose core uncertainty or capability comes from a model** — the cognition, not
+the substrate. It owns model selection/routing, the prompt/context harness, structured outputs, tool
+and MCP *consumption*, the agent loop, retrieval *behavior*, memory, evals, guardrails, and
+AI-specific cost/observability. It does **not** own:
+
+- system boundaries, NFR budgets, threat model, build-vs-buy of the AI subsystem → **architecture**
+- serving substrate: MCP/tool *endpoints*, vector-store-as-served, gateways, durable-execution infra → **backend**
+- the governed pipeline + the vector store *as a dataset* → **data**
+- chat UI and streaming *render* → **frontend**
+- independent verification / red-team *as a release gate* → **quality**
+- deploy and the monitoring *platform* → **operate**
+- deterministic multi-system workflows, even when one step calls a model → **automation**
+
+`ai` *references* those substrates; it does not re-teach or override them. It works standalone and
+never silently invokes a sibling skill.
+
+## Non-negotiable invariants
+
+1. **Retrieval-first / anti-staleness — the flagship.** The model/SDK/price/spec layer changes
+   monthly. Every model name, price, version, and spec revision is date-stamped and re-verified
+   against the live source before use; never freeze a volatile fact, and never assert one as
+   "verified-live" inside a static doc. This is the single easiest way to ship a wrong skill — treat
+   any model table (including this repo's) as illustrative until re-checked.
+2. **Implement inside the decision.** Consume upstream artifacts (contracts, NFR budgets, threat
+   model, `handoff.yaml`); when none exist, say so rather than inventing them.
+3. **Verify-and-subtract, not just assemble.** Every recommendation names what to build, what NOT to
+   build, and what to remove. Cap each pass at 3–5 decisions.
+4. **Evals are the completion gate, not an afterthought.** Never assert "it works" from memory;
+   report `pass^k` for reliability. Distinct from `quality`'s independent gate.
+5. **Cost is architectural.** Design for prompt caching first; order the levers (cascade → cache →
+   batch → effort). Teach the per-model $ math and the model/tooling license spread.
 
 ## Required behavior
 
-1. Run the generic `scripts/check-sync` gate before specialized repository checks. Never replace
-   packaging and navigation validation with domain-specific assertions.
-2. Keep runtime frontmatter to `name` and `description`. Keep versions and repository metadata in
-   `.codex-plugin/plugin.json`, `CHANGELOG.md`, tags, and releases.
-3. Keep `SKILL.md` as the direct router. References are flat, directly linked, self-describing, and
-   loaded only when their observable conditions apply.
-4. Keep repository documentation, evaluation data, release files, and optional site assets outside
-   `skills/<name>/`.
-5. Make standalone behavior complete. Recommend adjacent skills without silently invoking them.
-6. Add deterministic scripts only for fragile or repeated mechanics and execute them in tests.
-7. Treat README as the primary storefront. Site and Remotion profiles are optional publishing
-   work — but when kept, follow the [site/README.md](site/README.md) design brief: design the
-   sections, components, and hero visualization for this skill's own mental model inside the
-   shared family chrome and accent identity. Never ship the skeleton with its `TODO`s filled.
-8. Release through matching plugin version, changelog entry, tag, and GitHub Release, and
-   configure the GitHub About area (family-style description, canonical site alias as homepage,
-   base + domain topics). Do not put a version string back into `SKILL.md`.
+1. Run `scripts/check-sync` (and `scripts/lint-skill`) before any release; never replace the generic
+   gate with domain-only checks.
+2. Keep runtime frontmatter to `name` and `description`. Versions/metadata live in
+   `.codex-plugin/plugin.json`, `CHANGELOG.md`, tags, and releases — never in `SKILL.md`.
+3. Keep `SKILL.md` the direct router: one primary job × ≤1 base surface (+ additive multi-agent
+   overlay), plus the "Not this skill →" decline table. References are flat, directly linked,
+   self-describing, loaded only when their conditions apply.
+4. Every reference begins with `Purpose / Read when / Skip when / Inputs / Produces`; add a
+   `## Contents` when it exceeds ~100 lines. Dense is acceptable; some refs intentionally exceed the
+   2,500-token soft ceiling.
+5. Exhaustive-coverage artifacts (guardrail controls, license flags, OTel fields) are uniform tables
+   with a self-audit count, never a narrative.
+6. Keep repository docs, eval fixtures, research, and site assets outside `skills/ai/`.
+7. Release through matching plugin version, changelog entry, tag, and GitHub Release; set the GitHub
+   About area (family-style description, canonical site alias as homepage, base + domain topics).
 
-Do not mark the repository complete merely because structural lint passes. Activation, traversal,
-and representative output evaluations must also show that the skill changes agent behavior usefully.
+Do not mark the repository complete because structural lint passes. Activation, traversal, and output
+evaluations must show the skill changes agent behavior usefully.

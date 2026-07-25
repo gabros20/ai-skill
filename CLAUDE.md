@@ -1,5 +1,8 @@
 # Claude Code repository guide
 
-Read [AGENTS.md](AGENTS.md) for the repository rules and
-[TEMPLATE-CHECKLIST.md](TEMPLATE-CHECKLIST.md) for the ordered release checklist. On a fresh derived
-repository, run `scripts/init` before editing the skill. Run `scripts/check-sync` before release.
+This is the released `ai-skill` (runtime skill `ai`, under `skills/ai/`). Read [AGENTS.md](AGENTS.md)
+for the ownership boundary and non-negotiable invariants — especially **retrieval-first /
+anti-staleness**: never present a model name, price, version, or spec revision as fact without
+date-stamping it and re-verifying against the live source.
+
+Run `scripts/check-sync` before any release. Keep `SKILL.md` the router; keep versions out of it.

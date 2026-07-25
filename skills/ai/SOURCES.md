@@ -58,7 +58,7 @@ before relying on any of them (this layer churns monthly).**
 - jpoindexter model-routing-and-fallback (no license — paraphrase only) · goodnight77/rag-skills (MIT) · elastic/posthog LLM-observability skills
 
 ## Method
-Detailed source-linked corpora and the build-gate synthesis live in the `digital-product-skill`
-repository under `research/ai/` ({skills,web-canon,github,x}-corpus.md + synthesis.md). Licensing is
+Detailed source-linked corpora and the build-gate synthesis live in this repository under
+`research/` ({skills,web-canon,github,x}-corpus.md + synthesis.md). Licensing is
 teaching content: where a donor is copyleft (GPL/CC-BY-SA) or source-available (BSL/SSPL/ELv2), only
 concepts were reused, never verbatim text or code.

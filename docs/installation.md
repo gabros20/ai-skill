@@ -6,7 +6,8 @@ Install the `ai` runtime pack from the independently versioned
 ## Prerequisites
 
 - An Agent Skills-compatible client.
-- TODO: Add only real skill-specific tools, credentials, or runtime requirements.
+- No skill-specific credentials or tools are required. `ai` is provider- and language-agnostic; it
+  recommends fetching current provider docs at build time (retrieval-first) but ships no keys.
 
 ## Install with skills.sh
 
