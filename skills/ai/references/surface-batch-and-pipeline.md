@@ -1,6 +1,6 @@
 # Surface: Batch and pipeline
 
-Purpose: Reshape the 9 primary-job refs for offline, at-scale work — classify/extract/tag/label
+Purpose: Reshape the 10 primary-job refs for offline, at-scale work — classify/extract/tag/label
 over N items with no human in the loop. **Cost-per-item is the central design axis** on this
 surface in a way it isn't on any interactive surface.
 

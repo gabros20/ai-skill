@@ -1,6 +1,6 @@
 # Surface: Autonomous agent
 
-Purpose: Reshape the 9 primary-job refs for a system that runs many steps without a human present
+Purpose: Reshape the 10 primary-job refs for a system that runs many steps without a human present
 at each one — the long-horizon harness: loop + tools + context compaction + durable execution +
 termination. This is where prompt/context engineering and agent construction bend hardest of any
 surface.
@@ -59,32 +59,22 @@ Produces:
 | [observability-and-cost.md](observability-and-cost.md) | Track run-level aggregates (total steps, total cost, wall-clock duration, escalation count) alongside per-step traces — a single "session" now spans many spans, and the run's own termination behavior is itself a metric to watch (did it stop when it should have). |
 
 ### 2. Context compaction — the central bend
-Every step of an autonomous run adds to the transcript; unmanaged, this hits the model's attention
-budget and degrades ("context rot" from the O(n²) cost of attending over a growing history —
-Anthropic, cited above). The toolkit, in order of first resort:
-- **Just-in-time retrieval** — keep lightweight references (IDs, file paths) in context and load
-  full content only at the point of use, rather than front-loading everything a run might need.
-- **Compaction** — periodically summarize the older portion of the transcript into a condensed form
-  and drop the verbatim history, preserving decisions/state, not narrative.
-- **Structured note-taking** — write durable facts to an external memory file/scratchpad rather than
-  relying on the model to re-derive them from a shrinking context window each step.
-- **Sub-agent isolation** — delegate a sub-task to a sub-agent with its own clean context, and fold
-  back only a condensed result (this is also this surface's entry point into
-  [surface-multi-agent.md](surface-multi-agent.md)).
-A chat surface can often skip all of this (turns are short, the human resets context implicitly by
-asking a new question); an autonomous run cannot — treat compaction as a structural requirement from
-the first design pass, not a fix applied once a run starts failing.
+The mechanics — just-in-time retrieval, compaction, structured note-taking, and sub-agent isolation
+— are owned by [prompt-and-context-engineering.md](prompt-and-context-engineering.md) §5; read them
+there. **What changes on this surface:** every step of an autonomous run adds to the transcript, so
+unmanaged context hits the attention budget and degrades ("context rot"). A chat surface can often
+skip all of this (turns are short, the human implicitly resets context by asking a new question); an
+autonomous run cannot — treat compaction as a **structural requirement from the first design pass**,
+not a fix applied once a run starts failing. Sub-agent isolation is also this surface's entry point
+into [surface-multi-agent.md](surface-multi-agent.md).
 
 ### 3. Harness hygiene: prune, don't only add
-The distinctive risk on this surface: harnesses only ever *grow* — more tools, more system-prompt
-instructions, more skills — and across a model-generation cycle that raises cost and *hurts*
-accuracy (@sh_reya, x.com/sh_reya/status/2074973561002115241, 2026). The counter-discipline, evidenced
-in production: Anthropic "removed ~80% of the Claude Code system prompt for our newest models"
-(@trq212, x.com/trq212/status/2080710971228918066, Jul 2026) — better models need *less* scaffolding,
-not more. Treat the harness (tools, prompts, skills available to the loop) as a maintained artifact:
-re-evaluate what's still earning its token cost on every model upgrade, and remove what isn't,
-verified against the regression suite (§1's evaluation row) so pruning doesn't silently regress
-capability.
+The prune-before-add discipline and its evidence are owned by
+[prompt-and-context-engineering.md](prompt-and-context-engineering.md) §6. **What changes on this
+surface:** an unattended, long-running harness accretes tools and instructions fastest and pays for
+the bloat on *every* step, so the discipline is non-optional here. Re-evaluate what still earns its
+token cost on every model upgrade and remove what doesn't — verified against the regression suite
+(§1's evaluation row) so pruning doesn't silently regress capability.
 
 ### 4. The durable-execution border
 Treat "the loop must survive a crash/restart/deploy" as a default requirement once a run spans more

@@ -43,29 +43,29 @@ Produces:
 ## Procedure
 
 ### 1. Provider/tier selection by price-per-intelligence
-Every major provider ships 3–5 tiers spanning roughly a 5–10× output-price gap between flagship
-and cheapest tier (web-canon-corpus §c). Pick by **price-per-intelligence for the task**, not by
-brand loyalty or "always use the flagship." Modal frontier lineup, **version-dated, re-verify
-before quoting** (pricing pages churn monthly — re-check `platform.claude.com/docs/en/about-claude/models/overview`,
-`developers.openai.com/api/docs/pricing`, `ai.google.dev/gemini-api/docs/pricing`,
-`docs.x.ai` before publishing any $ figure downstream):
+Every major provider ships 3–5 tiers spanning roughly a **5–10× output-price gap** between flagship
+and cheapest tier. Pick by **price-per-intelligence for the task**, not by brand loyalty or "always
+use the flagship."
 
-| Provider | Flagship (as of 2026-07-25) | ID | Input $/MTok | Output $/MTok |
-|---|---|---|---|---|
-| Anthropic (top) | Claude Fable 5 | `claude-fable-5` | $10 | $50 |
-| Anthropic (flagship) | Claude Opus 5 | `claude-opus-5` | $5 | $25 |
-| Anthropic (mid) | Claude Sonnet 5 | `claude-sonnet-5` | $3 (intro $2 through 2026-08-31) | $15 (intro $10) |
-| Anthropic (fast) | Claude Haiku 4.5 | `claude-haiku-4-5` | $1 | $5 |
-| OpenAI | GPT-5.6 Sol / Terra / Luna | `gpt-5.6-sol`/`-terra`/`-luna` | $5 / $2.50 / $1 | $30 / $15 / $6 |
-| Google | Gemini 2.5 Pro / 3.6 Flash | `gemini-2.5-pro`/`gemini-3.6-flash` | $1.25–2.50 / $1.50 | $10–15 / $7.50 |
-| xAI | Grok 4.5 | `grok-4.5` | $2 (<200k ctx) | $6 (<200k ctx) |
+The tier *structure* is stable; the specific model names, IDs, and prices churn monthly and **must
+be re-fetched from the live pricing page before you quote them** — this is the fastest-moving fact
+class in the skill, and the anti-staleness invariant applies in full. Re-check the live sources:
+`platform.claude.com/docs/en/about-claude/models/overview`, OpenAI's pricing page,
+`ai.google.dev/gemini-api/docs/pricing`, `docs.x.ai`.
 
-Spot-checked live 2026-07-25 against Anthropic's models-overview page: table confirmed accurate,
-plus one detail worth carrying — Claude Opus 5 and Sonnet 5 default the `effort` param to `high`
-on the API and Claude Code (see §4). Anthropic pricing source: (Anthropic models overview,
-platform.claude.com/docs/en/about-claude/models/overview); OpenAI/Google/xAI per web-canon-corpus §c.
-**Never freeze these numbers in a downstream doc without a re-verify note** — this is the
-fastest-churning fact class in the whole skill.
+Anchor to the tier shape, not memorized names. At the time of writing, the Anthropic lineup is the
+**Claude 5 family plus the current-generation Opus and Haiku**: top-of-line **Fable 5**
+(`claude-fable-5`), the **Opus flagship** (`claude-opus-4-8`), mid-tier **Sonnet 5**
+(`claude-sonnet-5`), and fast **Haiku 4.5** (`claude-haiku-4-5`). Other providers mirror the same
+shape — OpenAI, Google (Gemini Pro / Flash tiers), and xAI (Grok) each publish a flagship / mid /
+small (often a nano) tier. **Name the current model and confirm every price per provider on its
+live page at build time** rather than trusting any snapshot, including this one.
+
+> ⚠️ Do not copy a model/price table from memory or a stale doc into production. The decision shape
+> — a ~5–10× flagship-to-cheap spread, pick the cheapest tier that clears the accuracy bar — is what
+> transfers; the specific cells are illustrative and out of date the moment they're written. A
+> "verified-live" claim frozen into a document is exactly the anti-pattern this skill teaches
+> against: re-verification is a step you run, not a checkbox you inherit.
 
 ### 2. Routing cascade — the #1 cost lever
 Send classification/extraction/routing-decision work to the cheapest tier that clears the
@@ -122,11 +122,12 @@ an unsupported param to the fallback model.
 
 ### 4. Effort/reasoning knobs
 `effort`/reasoning-level parameters are a first-class cost lever, often cheaper and nearly as
-capable as swapping to a smaller model — try lowering effort before downgrading tier (web-canon-
-corpus §c). Confirmed live 2026-07-25: on Claude Opus 5 and Sonnet 5, `effort` defaults to `high`
-on the Claude API and Claude Code — set it explicitly per call class rather than accepting the
-default for cost-sensitive batch work (Anthropic models overview, platform.claude.com). Re-verify
-the current default per model before relying on it; defaults have changed release-to-release.
+capable as swapping to a smaller model — try lowering effort before downgrading tier. Availability
+and defaults vary by provider and model and change release-to-release: some models default a
+reasoning/`effort` parameter to a high setting, which is expensive for cost-sensitive batch work,
+so **verify the current parameter name and default for your target model on its live docs page and
+set it explicitly per call class** rather than assuming the default carries over from a previous
+generation.
 
 ### 5. Open vs closed + self-host, and the license spread
 Self-host when data residency, fine-tune ownership, or call volume make the ops/GPU cost cheaper

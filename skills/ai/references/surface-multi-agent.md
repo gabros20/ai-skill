@@ -45,7 +45,7 @@ Produces:
 
 ### 1. When NOT to multi-agent (read first)
 The clearest primary-source argument against multi-agent-by-default: Cognition's Walden Yan
-(cognition.com/blog/dont-build-multi-agents, 2025-06-12) — parallel subagents lack visibility into
+(cognition.ai/blog/dont-build-multi-agents, 2025-06-12) — parallel subagents lack visibility into
 each other's decision history, and "actions carry implicit decisions, and conflicting decisions carry
 bad results." His worked example: building Flappy Bird with two subagents in parallel, one designs a
 Mario-style background, the other an inconsistent bird sprite, because neither saw the other's

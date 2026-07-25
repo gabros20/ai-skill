@@ -67,8 +67,9 @@ that quarter" is useless without knowing which company, which quarter. Two fixes
   prepend a 50–100 token LLM-generated context blurb to each chunk *before* embedding and before
   building the BM25 index. Cheap via prompt caching (~$1.02 per million document tokens,
   date-stamped **as of 2024-09-19, re-verify against current cache pricing** — see
-  `model-selection-and-routing.md`). Reduced retrieval failure 35% alone, **49%→67% failure
-  reduction combined with reranking (§3)**.
+  `model-selection-and-routing.md`). Anthropic's staged numbers: **contextual embeddings alone
+  reduced retrieval failures ~35%; adding contextual BM25 (hybrid, §2) reached ~49%; adding
+  reranking (§3) reached ~67%** — each stage compounds on the last.
 - **Late chunking** (Jina AI / Weaviate, 2024-09-05, weaviate.io/blog/late-chunking): embed the
   *whole* document first through a long-context embedding model, then mean-pool token vectors into
   chunk-sized vectors after the fact. Gets late-interaction-quality context retention at the
@@ -96,8 +97,9 @@ dense+sparse to "structured search + vector search."
 ### 3. Cross-encoder rerank
 Retrieve wide (Anthropic's own contextual-retrieval work retrieved top-150), pass the candidate
 set through a cross-encoder reranker, keep a small high-precision set (top-20). This is the
-**largest single accuracy jump** in the pipeline — reranking on top of contextual retrieval took
-failure reduction from 35% to 49-67% (Anthropic, cited above). Cohere Rerank
+**largest single accuracy jump** in the pipeline — adding reranking on top of contextual
+embeddings + hybrid BM25 took retrieval-failure reduction from ~49% to ~67% (§1, Anthropic, cited
+above). Cohere Rerank
 (docs.cohere.com/docs/rerank-overview) is the modal hosted default; the discipline generalizes to
 any cross-encoder (bi-encoder retrieves cheaply at scale, cross-encoder refines expensively on a
 small candidate set — never run a cross-encoder over the full corpus). Rerank *refines*, it
@@ -118,11 +120,10 @@ reflexive escalation.
 
 ### 5. Evaluate retrieval and generation separately
 Retrieval and generation fail independently and need independent metrics — conflating them hides
-which stage to fix. Ragas (docs.ragas.io/en/stable/concepts/metrics/available_metrics, as of
-2025-12-09) is the converged vocabulary, echoed by deepeval and autoevals: **Context Precision**
-and **Context Recall** grade retrieval (did the right chunks come back); **Faithfulness** and
-**Answer/Response Relevancy** grade generation (did the model use the chunks correctly, stay
-grounded, answer the actual question). If Context Recall is low, fix chunking/fusion/rerank
+which stage to fix. Use the converged RAG-metric vocabulary — **Context Precision / Context Recall**
+grade retrieval, **Faithfulness / Answer Relevancy** grade generation — whose definitions are
+single-homed in [evaluation.md](evaluation.md) §7 (the flagship eval ref owns the metric table); this
+section owns only the retrieval-side *diagnostic routing*. If Context Recall is low, fix chunking/fusion/rerank
 (§1–3), not the prompt. If Faithfulness is low with good Context Recall, the retrieval pipeline is
 fine — the fault is in generation, and the fix routes to `evaluation.md`'s LLM-as-judge harness
 and prompt/context-engineering discipline, not back into this pipeline.

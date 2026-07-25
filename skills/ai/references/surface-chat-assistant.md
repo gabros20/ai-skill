@@ -1,6 +1,6 @@
 # Surface: Chat assistant
 
-Purpose: Reshape the 9 primary-job refs for an interactive, turn-taking system with a human present
+Purpose: Reshape the 10 primary-job refs for an interactive, turn-taking system with a human present
 at every turn — the **default surface** when no other shape is named. Does not redefine the job
 refs; states which knobs each turns when the caller is a person in a live conversation, not a batch
 job or an unattended agent.

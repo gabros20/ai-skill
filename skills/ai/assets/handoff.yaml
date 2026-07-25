@@ -62,7 +62,7 @@ threat_model_border:
   controls_for_quality_to_verify: []    # controls quality must verify independently, not assume covered
 
 volatile_facts:
-  - fact: ""                       # e.g. "Claude Opus 5 pricing", "MCP spec revision"
+  - fact: ""                       # e.g. "flagship model price/MTok", "MCP spec revision", "AI SDK version"
     as_of: ""                      # date stamp
     reverify_at: ""                # e.g. "platform.claude.com/docs/en/about-claude/models/overview"
 

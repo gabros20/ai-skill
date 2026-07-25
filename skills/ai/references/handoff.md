@@ -15,7 +15,7 @@ Skip when:
 - The request is standalone with no downstream consumer in view ("improve this prompt," "pick a
   model for this call," "add a retrieval eval") — produce the harness/config/eval and stop; an
   unread `handoff.yaml` is clutter, not diligence.
-- You need a specific job's own procedure — that's one of the 9 job references (`model-selection-
+- You need a specific job's own procedure — that's one of the 10 job references (`model-selection-
   and-routing.md`, `agent-construction.md`, `evaluation.md`, etc.) or a surface ref. This reference
   covers what happens after the system's cognition is decided, not how to design it.
 
@@ -140,7 +140,3 @@ frozen model name or price slip into the handoff uncaveated.
   in `recommended_next` — the never-auto-invoke boundary rule from the main SKILL.md applies at the
   handoff seam too.
 - **An `unresolved` item with no owner** — assign one or drop the item until it has one.
-
-<!-- pattern mirrors the sibling backend-skill's references/handoff.md (Tamás Gábor, MIT) — same
-seam discipline, same handoff.yaml shape, adapted from backend→operate/quality/frontend/data/ai to
-ai→quality/operate/backend/frontend/data. -->

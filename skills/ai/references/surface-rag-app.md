@@ -1,6 +1,6 @@
 # Surface: RAG app
 
-Purpose: Reshape the 9 primary-job refs for a system where grounded retrieval — answering from a
+Purpose: Reshape the 10 primary-job refs for a system where grounded retrieval — answering from a
 specific corpus with citations and freshness guarantees — is the point of the product, not one
 feature among several. [retrieval-and-rag.md](retrieval-and-rag.md) owns the retrieval *pipeline*
 mechanics (chunk/fuse/rerank/decompose/eval); this surface says how retrieval, once it's the spine,
