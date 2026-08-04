@@ -2,6 +2,8 @@
 
 **Visual guide:** [aiengskill.vercel.app](https://aiengskill.vercel.app)
 
+**Family hub:** [digital-product-skill.vercel.app](https://digital-product-skill.vercel.app) — the 15-skill Digital Product family and its composer.
+
 Build **the model-powered behavior of a product** — model selection and routing, the prompt/context
 harness, structured outputs, tool and MCP consumption, the agent loop, retrieval/RAG, memory, evals,
 guardrails, and AI cost/observability — across chat, autonomous-agent, RAG, batch, and multi-agent
