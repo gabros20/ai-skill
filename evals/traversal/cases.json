@@ -48,6 +48,24 @@
     "forbidden_references": []
   },
   {
+    "id": "web-search-tool-routing",
+    "prompt": "Give our support agent live web search plus a way to read a page and run deeper research reports, without blowing up the token bill.",
+    "expected_references": ["references/retrieval-and-rag.md"],
+    "forbidden_references": ["references/memory.md", "references/surface-multi-agent.md"]
+  },
+  {
+    "id": "computer-use-agent",
+    "prompt": "Build an agent that fills in forms on a legacy vendor portal that has no API, running unattended overnight.",
+    "expected_references": ["references/surface-autonomous-agent.md", "references/tool-and-mcp-integration.md"],
+    "forbidden_references": ["references/retrieval-and-rag.md"]
+  },
+  {
+    "id": "model-pick-cost-per-task",
+    "prompt": "Which coding model should our agent default to? Compare candidates by how much each successful task costs, not by leaderboard rank.",
+    "expected_references": ["references/model-selection-and-routing.md"],
+    "forbidden_references": ["references/guardrails-and-safety.md"]
+  },
+  {
     "id": "decline-to-architecture",
     "prompt": "Design the threat model and system boundaries for our agent platform.",
     "expected_references": [],

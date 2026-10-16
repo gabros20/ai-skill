@@ -15,6 +15,11 @@
     "should_trigger": true
   },
   {
+    "id": "positive-agent-web-search",
+    "prompt": "Add web search and page fetching to our agent so it can cite live sources.",
+    "should_trigger": true
+  },
+  {
     "id": "positive-llm-judge",
     "prompt": "Write an LLM-as-a-judge and a regression suite for our support bot.",
     "should_trigger": true

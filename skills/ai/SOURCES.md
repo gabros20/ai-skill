@@ -22,11 +22,17 @@ before relying on any of them (this layer churns monthly).**
 - Model Context Protocol spec — https://modelcontextprotocol.io/specification (stable 2025-11-25; 2026-07-28 RC pending — re-verify)
 - MCP Python/TypeScript SDKs (MIT, v1 for prod) · FastMCP (PrefectHQ, Apache-2.0) — https://github.com/PrefectHQ/fastmcp · MCP registry
 
+## Computer use (read 2026-10-17)
+- OpenAI computer-use guide — https://developers.openai.com/api/docs/guides/tools-computer-use
+- "Screenshots or Tools?" hybrid GUI–MCP agents — https://arxiv.org/abs/2608.03327 · OSWorld 2.0 — https://arxiv.org/abs/2606.29537
+- browser-use (MIT) · Stagehand (MIT) · Playwright MCP (Apache-2.0) · Skyvern (AGPL-3.0) — licenses via `gh api`
+
 ## Retrieval / RAG & vector stores
 - Anthropic, "Contextual Retrieval" — https://www.anthropic.com/engineering/contextual-retrieval
 - Late chunking (Jina/Weaviate) — https://weaviate.io/blog/late-chunking · Hybrid + RRF — https://weaviate.io/blog/hybrid-search-explained
 - Cohere Rerank — https://docs.cohere.com/docs/rerank-overview · LlamaIndex "agentic retrieval" — https://www.llamaindex.ai/blog/rag-is-dead-long-live-agentic-retrieval
 - pgvector (PostgreSQL License) · Qdrant · Weaviate (BSD-3) · Milvus · Chroma · LanceDB (Apache-2.0/permissive) · LlamaIndex (MIT)
+- Web search / fetch / research tools (read 2026-10-17; prices re-verify): Parallel extract best practices — https://docs.parallel.ai/extract/best-practices · Parallel search modes — https://docs.parallel.ai/search/modes · Parallel deep research — https://docs.parallel.ai/task-api/examples/task-deep-research · Exa search guide for agents — https://exa.ai/docs/reference/search-api-guide-for-coding-agents · Exa Agent — https://exa.ai/docs/reference/agent-api-guide · Anthropic web search tool — https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool · Google Places API — https://developers.google.com/maps/documentation/places/web-service/op-overview
 
 ## Memory
 - Letta / MemGPT — https://www.letta.com/blog/memory-blocks/ (Apache-2.0; active dev → letta-code)
@@ -37,6 +43,7 @@ before relying on any of them (this layer churns monthly).**
 - Anthropic, "Demystifying evals for AI agents" — https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
 - Simon Willison, "FAQs About AI Evals" — https://simonwillison.net/2025/Jul/3/faqs-about-ai-evals/
 - LangSmith evaluation concepts — https://docs.langchain.com/langsmith/evaluation-concepts
+- Benchmark trust: OpenAI's SWE-Bench Pro retraction — https://x.com/OpenAI/status/2074972179385720836 · "The Leaderboard Illusion" — https://arxiv.org/abs/2504.20879 · Artificial Analysis Coding Agent Index ($/task) — https://artificialanalysis.ai/agents/coding-agents
 - promptfoo (MIT) · deepeval (Apache-2.0) · Inspect AI (MIT, UK AISI) · ragas (Apache-2.0) · autoevals (MIT)
 - NeMo Guardrails (Apache-2.0) · Guardrails AI (Apache-2.0) · PurpleLlama (MIT code / Llama Community License weights)
 - Arize Phoenix (**Elastic License 2.0** — source-available, patent notice; concept-only reuse)
@@ -47,6 +54,7 @@ before relying on any of them (this layer churns monthly).**
 ## Models, token economics & serving
 - Anthropic / OpenAI / Google / xAI model + pricing pages (version-verified 2026-07-25; re-verify)
 - Open-weight model cards on Hugging Face (Qwen, DeepSeek, Mistral, Kimi, GLM — MIT/Apache; Llama — restricted Community License)
+- Self-host sizing: Hugging Face MoE explainer — https://huggingface.co/blog/moe · NVIDIA inference optimization — https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/ · vLLM parallelism — https://docs.vllm.ai/en/latest/serving/parallelism_scaling.html · vLLM prefix-cache salting — https://docs.vllm.ai/en/latest/design/prefix_caching.html
 - Vercel AI SDK — https://ai-sdk.dev (v7, `ai@7.0.37` npm-verified 2026-07-25; re-verify) · vLLM (Apache-2.0) · Ollama (MIT) · llama.cpp (MIT)
 - Gateways/routing: litellm (open-core) · Portkey (MIT). Durable execution: Temporal (MIT) · Inngest (SSPL) · Restate (BSL 1.1)
 

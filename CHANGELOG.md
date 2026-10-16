@@ -8,7 +8,24 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- **Cost-per-success model picking** (`model-selection-and-routing` §1b): `R`/`C`/`C/R` per
+  (model, harness, effort), a rotated private task set, a running Pareto, and a launch/shortlist/
+  quarterly cadence; scorecard gains a cost-per-success block. Image/video generation routing on
+  its own meter.
+- **Reading a published score** (`evaluation` §8): variant, harness, independent-vs-vendor, and
+  still-trusted checks; preference arenas as taste only.
+- **Open-web and vertical retrieval as agent tools** (`retrieval-and-rag` §7): the five search jobs
+  plus vertical lookup, a routing table, two web tools + one tool per vertical index, an
+  excerpts-first stop rule, deep research as an async capped job, separate meters.
+- **Computer-use agents** (`surface-autonomous-agent` §5, `tool-and-mcp-integration` §2):
+  tools-first, GUI-fallback, owned sandbox, untrusted screen content, screenshot budgeting,
+  long-horizon failure honesty, loop-ownership and license read of the OSS layers.
+- Tool fees as their own cost line and $ per successful task (`observability-and-cost` §4).
+
+### Fixed
+- MoE self-host sizing: memory follows *total* parameters (every expert is resident); active
+  parameters set per-token speed. Added the four-question sizing method and the shared-prefix-cache
+  isolation flag.
 
 ## [0.1.0] — 2026-07-25
 

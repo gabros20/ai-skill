@@ -65,5 +65,27 @@
       "Distinguishes schema conformance from content correctness (the latter is an eval concern)",
       "Any provider-specific field/flag name is date-stamped with a re-verify note"
     ]
+  },
+  {
+    "id": "web-search-excerpts-first",
+    "prompt": "Our chat agent calls one search tool that hits the web, Google Places, and a stock API, and fetches every result page. It's slow and expensive. Redesign it.",
+    "assertions": [
+      "Splits the tooling into a web search tool, a fetch tool, and one tool per vertical index (places, quotes) instead of one overloaded `search`, and explains the model cannot tell a miss from the wrong index",
+      "States an excerpts-first stop rule: answer from search excerpts and fetch only on a miss (a capped handful of URLs), never full-page content on every hit",
+      "Treats a place record or price quote as a database row from that API, not something to scrape from web pages",
+      "Routes report-style requests to an asynchronous research job with a cost ceiling, separate from the chat turn",
+      "Budgets search, fetch, research, and vertical calls as separate cost lines, and any per-call price is date-stamped with a re-verify note"
+    ]
+  },
+  {
+    "id": "model-pick-cost-per-success",
+    "prompt": "Two coding models: one resolves 70% of our tasks at $0.40 per attempt, the other 82% at $2.20. The second tops the leaderboards. Which should be our default?",
+    "assertions": [
+      "Computes cost per success (C/R): about $0.57 vs about $2.68, and recommends the first as the default unless the extra failures are catastrophic or can be escalated",
+      "Treats the intelligence index or leaderboard rank as a floor/filter, not the ranking key",
+      "Scopes the comparison to (model, harness, effort) and recommends confirming on a private set of real tasks, rotated over time",
+      "Suggests a cascade/escalation to the stronger model for tasks the first fails, rather than a flat switch",
+      "Any model name or price is date-stamped with a re-verify instruction"
+    ]
   }
 ]
