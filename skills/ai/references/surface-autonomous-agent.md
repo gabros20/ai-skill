@@ -121,7 +121,8 @@ changes on this surface:
 - **Name who owns the loop** before picking an OSS layer: browser-use (MIT) — the agent owns the
   loop; Stagehand (MIT) — Playwright with AI escape hatches, you keep the loop; Playwright MCP
   (Apache-2.0) — tooling exposed to whatever model already orchestrates, not an agent; Skyvern
-  (**AGPL-3.0** — copyleft reaches network use; flag it before embedding in a hosted product).
+  (**AGPL-3.0** — its network clause bites if you modify it and serve it to users; flag it before
+  embedding in a hosted product).
   Licenses via `gh api`, 2026-10-17 — re-verify.
 
 ## Validation

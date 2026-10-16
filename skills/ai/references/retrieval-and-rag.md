@@ -202,7 +202,9 @@ can't hold your output — then you own the runaway.
 
 **Buy the index, build the router.** The custom part is the router, the tool list, and the stop
 rule; the crawl, refresh, and ranking are a company. Self-host metasearch + a crawler only when the
-per-query fee is the problem and quality isn't; free keyless allowances are trials, not a
+per-query fee is the problem and quality isn't — and read the licenses first: SearXNG and
+Firecrawl are AGPL-3.0, Crawl4AI is Apache-2.0 (`gh api`, 2026-10-17) — AGPL's network clause bites if you
+modify one and serve it to users; free keyless allowances are trials, not a
 production stack; and **pin the backend** — a failover ring that round-robins vendors means you
 don't know which index served a call, so neither cost nor quality is attributable. Meters differ
 and don't divide into each other: per call, per fetched URL, per research run, per vertical call,
