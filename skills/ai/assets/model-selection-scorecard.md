@@ -19,6 +19,19 @@ $/MTok figure at fill time — pricing pages churn monthly, don't trust a stale 
 | Cache-eligible? (stable system prompt/tools prefix present) | |
 | Batch-eligible? (offline, no human in loop → flat 50% off) | |
 
+## Cost per success (fill in for agentic / task-shaped call-classes)
+
+One row per (model, harness, effort) candidate, scored on the same private task set.
+
+| Model ID (dated) | Harness | Effort | Private set (n tasks, date) | `R` | `C` $/attempt all-in | `C/R` | On the Pareto? |
+|---|---|---|---|---|---|---|---|
+| | | | | | | | |
+| | | | | | | | |
+
+- `I` (intelligence index) is a floor you checked, not the column you sort by.
+- A candidate both costlier and lower-`R` than another is in the kill zone — drop it from the
+  default.
+
 ## Cascade (fill in if this call-class is high-volume/low-complexity)
 
 | Field | Fill in |
@@ -53,5 +66,6 @@ $/MTok figure at fill time — pricing pages churn monthly, don't trust a stale 
 | Who owns the serving substrate (vLLM/Ollama/gateway) — confirm this is a `backend`/`operate` handoff, not owned here | |
 
 **Self-audit: ____ / 10 required fields above completed** (call-class + cascade sections; count
-fallback-chain rows separately, ≥2 hops expected for anything user-facing). Anything left blank
+fallback-chain rows separately, ≥2 hops expected for anything user-facing; count cost-per-success
+rows separately, ≥2 candidates expected for any agentic call-class). Anything left blank
 must be either filled before ship or explicitly marked "not applicable" with a stated reason.

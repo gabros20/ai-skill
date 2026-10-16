@@ -155,6 +155,23 @@ Foundation-model benchmarks are not your evals (@HamelHusain, x.com/HamelHusain/
 1921221339337421235). Treat any adoption number or leaderboard rank as engagement, not gospel —
 build the domain-specific dataset from §1 before trusting a published score.
 
+When a published score must be read anyway (a launch claim, a shortlist filter), run four checks:
+1. **Which variant?** Sibling suites (e.g. SWE-bench Verified vs Pro vs Multilingual) are not
+   comparable; a gap between two variants is not a model gap.
+2. **Which harness?** The same weights under a different agent harness, scaffold, or effort level
+   score differently — a number from an unnamed harness is not evidence.
+3. **Independent or vendor?** An independent re-run outranks the lab's own chart.
+4. **Still trusted this quarter?** Benchmarks die: OpenAI audited SWE-Bench Pro, found 30% of its
+   tasks broken, and retracted its own recommendation to use it as a leading coding eval
+   (@OpenAI, x.com/OpenAI/status/2074972179385720836, 2026-07-08).
+
+Preference arenas measure taste, not task completion — style and sampling effects can inflate a
+rank ("The Leaderboard Illusion," arxiv.org/abs/2504.20879; @karpathy,
+x.com/karpathy/status/1917546757929722115). Never average an Elo with a resolve rate. Public
+suites are **filters**; the decision is a private set scored per (model, harness, effort) — the
+cost-per-success procedure lives in `model-selection-and-routing.md` §1b. And a frozen small set
+over-optimized against becomes fake too: rotate a few tasks each cycle.
+
 ## Validation
 - A failure taxonomy exists, built from real traces via open→axial coding, not assumed upfront.
 - Judge alignment is reported as precision/recall against a human-labeled holdout, not raw
@@ -163,7 +180,8 @@ build the domain-specific dataset from §1 before trusting a published score.
   system (agentic/safety work uses Task-Solver-Scorer).
 - Suite type (offline/online/regression/safety) is assigned per eval, not left implicit.
 - Reliability claims cite pass^k, not pass@k, where retries aren't available to the user.
-- No ship decision rests solely on a public benchmark score.
+- No ship decision rests solely on a public benchmark score; any cited score names its variant,
+  harness, and source (independent vs vendor).
 
 ## Failure modes and handoff
 - **No real traces exist yet** — don't start with judge-building; instrument the system and collect

@@ -27,7 +27,8 @@ Inputs:
   hosted API.
 
 Produces:
-- A tier pick (not a hardcoded model ID) with a named fallback chain.
+- A tier pick (not a hardcoded model ID) with a named fallback chain, justified by cost per
+  success (`C/R`) on a private task set where the work is task-shaped.
 - A cascade design for high-volume/low-complexity paths, or a stated reason to skip one.
 - An effort/reasoning-level default per call class.
 - An open/closed + license decision, flagged if the deployment is hosted/resold.
@@ -35,6 +36,7 @@ Produces:
 
 ## Contents
 - Provider/tier selection by price-per-intelligence
+- Pick by cost-per-success, not $/MTok or leaderboard rank
 - Routing cascade — the #1 cost lever
 - Fallback & degradation — degrade honestly, never silently
 - Effort/reasoning knobs
@@ -67,6 +69,52 @@ live page at build time** rather than trusting any snapshot, including this one.
 > "verified-live" claim frozen into a document is exactly the anti-pattern this skill teaches
 > against: re-verification is a step you run, not a checkbox you inherit.
 
+**Pin identity before you price or score.** A marketing nickname is not an API model ID, and
+sibling lines with near-identical names (a Flash vs a Pro image line, a "-Max" API vs the
+downloadable checkpoint of the same family) can differ several-fold in price and capability.
+Resolve every candidate to the exact API ID (or the exact Hugging Face repo) first; never attach an
+API twin's score to an open checkpoint, or a nickname's price to the ID you actually call.
+
+### 1b. Pick by cost-per-success, not $/MTok or leaderboard rank
+For agentic and task-shaped work the number to minimize is **cost per successful task**, measured
+per **(model, harness, effort level)** — the same weights under a different agent harness or
+effort setting are a different system. Record three numbers together:
+
+| Symbol | What | Note |
+|---|---|---|
+| `R` | Resolve rate on a named task set (0–1) | Binary done/not-done; no partial credit unless defined up front |
+| `C` | $ per attempt, all-in | Input + cache write/read + reasoning + output + tool fees — not $/MTok in isolation |
+| `I` | An intelligence index | A **floor** (constraint), never the ranking key |
+
+Derived: **cost per success = `C / R`** (minimize) and **tasks per dollar = `R / C`** (maximize).
+Illustrative arithmetic: model A at `R=0.70`, `C=$0.40` costs $0.57 per success; model B at
+`R=0.82`, `C=$2.20` costs $2.68 — B is "smarter" and resolves more, but A wins unless the extra 12%
+of failures are catastrophic. Never rank on cost alone (a cheap model that fails 80% is expensive)
+or on intelligence alone (you pay for unused headroom — the "intelligence tax" is the extra `C`
+that buys no extra `R`).
+
+The procedure, which keeps the anti-staleness invariant honest without re-running public suites on
+every launch:
+1. **Decide the task shape first** — repo repair, long shell work, multi-language edits, fresh
+   algorithms, chat taste. Public scores do not transfer across shapes, and preference Elo never
+   enters `C/R` (see `evaluation.md` §8 for reading a published score).
+2. **Filter on public boards that report $/task**, not raw % — e.g. the Artificial Analysis Coding
+   Agent Index reports cost, tokens, and time *per task* by model and agent
+   (artificialanalysis.ai/agents/coding-agents, checked 2026-10-17 — re-verify its columns).
+3. **Decide on a private set**: freeze 10–20 real tasks from your own work, run them in the harness
+   you actually ship, score binary, log the token bill, compute `C/R` on *your* distribution, and
+   rotate 2–3 tasks each cycle so the winner can't memorize the set. Keep separate private sets
+   per axis (e.g. a language-quality set never folds into a coding `R`).
+4. **Keep a running Pareto**: drop from the default anything both costlier and worse than another
+   candidate (the "kill zone").
+5. **Cadence**: launch week → skim the boards, update the Pareto row, no private run; shortlist
+   change → rerun the private set; quarterly → rotate tasks and re-check whether each public
+   benchmark is still trusted (benchmarks die — `evaluation.md` §8).
+
+The private-set mechanics (binary judging, dataset shape) are `evaluation.md`'s; this section owns
+using them to pick a model. Fill the cost-per-success block of
+[model-selection-scorecard.md](../assets/model-selection-scorecard.md).
+
 ### 2. Routing cascade — the #1 cost lever
 Send classification/extraction/routing-decision work to the cheapest tier that clears the
 accuracy bar; reserve the flagship for genuinely open-ended reasoning. This is the highest-
@@ -88,6 +136,15 @@ Bound escalation: cap depth at one hop (cheap → flagship, not a ladder), and l
 — an unbounded escalation ladder and a cascade that silently never escalates are both named
 failure modes in practitioner routing guidance (skills-corpus, jpoindexter donor, paraphrased —
 no verbatim lift, source has no declared license).
+
+**Image/video generation routes the same way, on a different meter.** Tier by how hard the output
+will be scrutinized (a hero/brand asset → frontier tier; filler and drafts → the cheap tier),
+price per image or per second from the live page (aggregator and reseller rates drift from
+first-party ones), keep video opt-in per run — per-second billing makes one clip cost more than
+many stills — and give the run a spend ceiling. Drive a deterministic generation with a direct
+API call rather than wrapping it in an agentic CLI (latency and nondeterminism for no judgment
+gained), and set dimensions and duration through the API's own parameters (e.g. OpenAI's image
+`size`), never as words in the prompt.
 
 ### 3. Fallback & degradation — degrade honestly, never silently
 **Routing and fallback are different problems**: routing picks the right tier for the task up
@@ -150,9 +207,34 @@ version-dated (as of 2026-07-25, HF model cards — re-verify, these version-bum
 
 Qwen/DeepSeek/Mistral/GLM are genuinely permissive (MIT/Apache); Llama is the outlier — a custom
 license gating certain commercial uses, not a standard open-source grant. Treat "open-weight" and
-"open-source license" as two separate questions on every self-host decision. VRAM scales with
-**active** params × quantization for MoE architectures, not total param count — don't size
-hardware off the headline parameter count.
+"open-source license" as two separate questions on every self-host decision; also read for
+revenue- or MAU-gated clauses that require a separate deal above a threshold.
+
+**Size a self-host box with four questions, in order:**
+1. **Fits?** Weights ≈ parameter count × bytes per parameter at the chosen precision (16-bit ≈ 2
+   bytes, so 7B ≈ 14 GB; 4-bit ≈ 0.5 byte plus quantization overhead), **plus the KV cache**, which
+   grows with batch × sequence length (NVIDIA, developer.nvidia.com/blog/mastering-llm-techniques-
+   inference-optimization/). For **MoE, memory follows the *total* parameter count** — every
+   expert must be resident even though only the active ones compute per token (Hugging Face,
+   huggingface.co/blog/moe: a Mixtral 8x7B needs VRAM for a dense ~47B model). Active params set
+   per-token compute/speed, not the memory bill.
+2. **Breathes?** Decode is memory-bandwidth-bound (same NVIDIA source), so capacity decides *fit*
+   and bandwidth decides *tok/s* — a large-but-slow unified-memory box and a small-but-fast GPU
+   answer different questions.
+3. **Smart enough?** An open-weights intelligence filter, then the §1b private set on the exact
+   checkpoint and quantization you will run — not the hosted API twin's score.
+4. **Legal?** The license read above. And confirm the weights are actually downloadable — an
+   "open weights soon" announcement or a hosted-only "open" model is not a self-host option, and
+   downloadable is not the same as hostable when the model needs a rack.
+
+Self-host `C` for §1b is (hardware amortization + power, idle included + ops time) ÷ tasks per
+month. Shard one model across devices only for **capacity**: if it fits one GPU, distributed
+inference is "probably unnecessary" (vLLM, docs.vllm.ai/en/latest/serving/parallelism_scaling.html)
+— extra boxes for a model that fits add hops and idle watts, which lowers tasks per dollar.
+**A shared prefix/KV cache is not tenant isolation**: latency differences can reveal another
+user's cached content, which is why vLLM offers per-request cache salting so only requests with the
+same salt reuse cached blocks (docs.vllm.ai/en/latest/design/prefix_caching.html, read 2026-10-17).
+Decide here whether tenants may share a cache; the serving configuration is `backend`'s.
 
 **Border**: the serving substrate that runs a self-hosted or gateway-routed model (vLLM/Ollama,
 litellm/Portkey/vercel-ai gateways, MCP endpoints) is `backend`/`operate` territory — this
@@ -170,6 +252,10 @@ how to deploy one.
 - Any open-weight model recommended for a commercial/resold context carries its license flag,
   Llama explicitly.
 - Every $/MTok figure carries a date stamp and a re-verify pointer.
+- Agentic/task-shaped picks report `R`, `C`, and `C/R` per (model, harness, effort) on a private
+  set — not a leaderboard rank or a $/MTok comparison alone.
+- Self-host sizing uses total params for MoE memory, includes the KV cache, and names whether
+  tenants share a prefix cache.
 
 ## Failure modes and handoff
 - **No fallback at all** — a single provider outage becomes a hard outage. Add one before ship.
@@ -179,6 +265,10 @@ how to deploy one.
   hop and log.
 - **Route-everything-cheap** — no escalation path at all, quietly shipping wrong answers on hard
   inputs; pair every cascade with a verifier or eval gate (→ `evaluation.md`).
+- **Max-intelligence by default** — the top-index model picked for batch or routine work pays
+  the intelligence tax; pick the cheapest tier whose `R` clears the bar.
+- **Hardware sized off active params** — an MoE that "only activates 13B" still needs memory for
+  all of its experts.
 - **Ask is really about telemetry, not the routing decision** — route to
   [observability-and-cost.md](observability-and-cost.md).
 - **Ask is really about deploying the serving substrate** — route to `backend`/`operate`; this
