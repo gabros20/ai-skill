@@ -25,7 +25,7 @@ before relying on any of them (this layer churns monthly).**
 ## Computer use (read 2026-10-17)
 - OpenAI computer-use guide — https://developers.openai.com/api/docs/guides/tools-computer-use
 - "Screenshots or Tools?" hybrid GUI–MCP agents — https://arxiv.org/abs/2608.03327 · OSWorld 2.0 — https://arxiv.org/abs/2606.29537
-- browser-use (MIT) · Stagehand (MIT) · Playwright MCP (Apache-2.0) · Skyvern (AGPL-3.0) — licenses via `gh api`
+- browser-use (MIT) · Stagehand (MIT) · Playwright MCP (Apache-2.0) · Skyvern (AGPL-3.0) · SearXNG (AGPL-3.0) · Firecrawl (AGPL-3.0) · Crawl4AI (Apache-2.0 **plus an appended Attribution Requirement** — public/web-app use must credit it) — LICENSE files read 2026-10-17
 
 ## Retrieval / RAG & vector stores
 - Anthropic, "Contextual Retrieval" — https://www.anthropic.com/engineering/contextual-retrieval

@@ -40,6 +40,8 @@ Produces:
 - A retrieve→fuse→rerank pipeline shape, with the "what NOT to add yet" boundary stated.
 - A vector-store pick with the tradeoff named against the alternative.
 - A retrieval-evaluation stance (which metrics, cross-referenced to `evaluation.md`).
+- For agent web/vertical retrieval: the tool split (search, fetch, one tool per vertical index),
+  the stop rule, a research-job budget, and the license flags for any self-hosted layer.
 
 ## Contents
 - The 5-stage modern pipeline
@@ -185,8 +187,8 @@ Extract returns whole-page markdown, boilerplate included). No separate parse to
 inside fetch, and re-parsing a page you already hold excerpts for doubles the bill. **One tool per
 vertical index**, never one `search` that sometimes hits the web, sometimes maps, sometimes a
 ticker: the model can't tell a miss from the wrong index. The stop rule: **excerpts first, fetch
-on a miss (cap it at the one to three URLs the excerpts didn't answer), never full-page markdown
-on every hit** — excerpt/highlight output is the recommended agent default because it gives the
+on a miss (a small capped handful — this pack's heuristic is ≤3 — of the URLs the excerpts didn't
+answer), never full-page markdown on every hit** — excerpt/highlight output is the recommended agent default because it gives the
 evidence "without filling the context window" (Exa, exa.ai/docs/reference/search-api-guide-for-
 coding-agents); Anthropic's newer web-search tool versions go further and filter results with code
 before they reach context (platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool).
@@ -200,21 +202,37 @@ agent-api-guide). Show progress if a person waits; never poll inside the chat mo
 Buy the vendor job when the output is a report; write your own loop only when the vendor's schema
 can't hold your output — then you own the runaway.
 
-**Buy the index, build the router.** The custom part is the router, the tool list, and the stop
-rule; the crawl, refresh, and ranking are a company. Self-host metasearch + a crawler only when the
-per-query fee is the problem and quality isn't — and read the licenses first: SearXNG and
-Firecrawl are AGPL-3.0, Crawl4AI is Apache-2.0 (`gh api`, 2026-10-17) — AGPL's network clause bites if you
-modify one and serve it to users; free keyless allowances are trials, not a
-production stack; and **pin the backend** — a failover ring that round-robins vendors means you
-don't know which index served a call, so neither cost nor quality is attributable. Meters differ
-and don't divide into each other: per call, per fetched URL, per research run, per vertical call,
-and model-native in-request search (Anthropic: $10 per 1,000 searches **plus** result tokens
-billed as input, errors unbilled — as of 2026-10-17, re-verify) — budget each as its own line
-(`observability-and-cost.md` §4). Before depending on a provider, run a small same-day probe on
-your own query mix — including non-English and freshness queries — and score citeable text,
-current date, and latency: modes carry language limits (Parallel's lowest-latency mode documents
-English and Japanese only, docs.parallel.ai/search/modes), and public search-provider boards
-measure a multi-turn research agent, not a one-second tool call.
+**Buy the index, build the router:**
+- The custom part is the router, the tool list, and the stop rule; the crawl, refresh, and
+  ranking are a company. Self-host metasearch + a crawler only when the per-query fee is the
+  problem and quality isn't — and read the licenses first (table below).
+- Free keyless allowances are trials, not a production stack.
+- **Pin the backend** — a failover ring that round-robins vendors means you don't know which index
+  served a call, so neither cost nor quality is attributable.
+- Meters differ and don't divide into each other: per call, per fetched URL, per research run, per
+  vertical call, and model-native in-request search (Anthropic: $10 per 1,000 searches **plus**
+  result tokens billed as input, errors unbilled — as of 2026-10-17, re-verify). Budget each as
+  its own line (`observability-and-cost.md` §4).
+- Before depending on a provider, run a small same-day probe on your own query mix — including
+  non-English and freshness queries — scoring citeable text, current date, and latency. Modes
+  carry language limits (Parallel's lowest-latency mode documents English and Japanese only,
+  docs.parallel.ai/search/modes), and public search-provider boards measure a multi-turn research
+  agent, not a one-second tool call.
+
+**OSS web/browser layer license flags** (each LICENSE file read, 2026-10-17 — re-verify; the
+browser-agent rows are referenced from `surface-autonomous-agent.md` §5):
+
+| Layer | Role | License | Obligation that bites |
+|---|---|---|---|
+| SearXNG | Self-hosted metasearch (links + snippets, not pages) | AGPL-3.0 | Network clause: modify it and serve it to users → offer the modified source |
+| Firecrawl (self-host) | Search + scrape to markdown | AGPL-3.0 | Same AGPL network clause |
+| Crawl4AI | Crawler / URL → text | Apache-2.0 **plus an appended Attribution Requirement** | Public or web-app use must credit it (e.g. an About/Credits page; NOTICE/README for distributions) |
+| browser-use | Browser agent — the agent owns the loop | MIT | Keep the notice |
+| Stagehand | Playwright + AI escape hatches — you keep the loop | MIT | Keep the notice |
+| Playwright MCP | Browser tooling exposed over MCP — not an agent | Apache-2.0 | Keep the license and any NOTICE file |
+| Skyvern | Vision-first browser agent | AGPL-3.0 | AGPL network clause — flag before embedding in a hosted product |
+
+Self-audit: 7 / 7 layers carry a license read from the LICENSE file, not just the SPDX id.
 
 ## Validation
 - The chunking strategy names which document-context-loss problem it fixes and why (contextual vs.

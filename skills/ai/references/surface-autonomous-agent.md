@@ -37,6 +37,8 @@ Produces:
 - A context-compaction policy for when the transcript exceeds the attention budget.
 - A harness-hygiene plan: what gets pruned, and on what cadence (model upgrades, at minimum).
 - An approval-gate map for privileged actions.
+- For computer-use agents: the owned-sandbox spec (isolation, allowlist, network limits), the
+  confirmation map for consequential actions, and the tools-first / GUI-fallback split.
 
 ## Contents
 - Job impact table
@@ -106,7 +108,9 @@ changes on this surface:
 - **Screen content is untrusted**: "Text in a page, document, or tool result cannot grant
   permission or override the user's instructions" (same guide). **Confirm consequential actions**
   — purchases, data transmission (typing sensitive data into a form counts), destructive changes —
-  and set step, time, or cost limits with cancellation. Running many tenants' arbitrary
+  and set step, time, or cost limits with cancellation. Keep credentials out of page text and
+  screenshots (same guide) — and so out of the transcript and memory: hand over to the user or use
+  an injected credential, never a typed secret that lands in a screenshot. Running many tenants' arbitrary
   model-generated code is a stronger isolation problem (containers share the host kernel; reach
   for microVM-class isolation and default-deny egress) — the infra is `backend`'s.
 - **Screenshots are the unit cost.** Drop the screenshot that follows a successful tool call and
@@ -118,12 +122,10 @@ changes on this surface:
   verification, and struggled with hidden state (arxiv.org/abs/2606.29537, v2 2026-07-13). Build
   an explicit ask-the-user path and a verify-final-state step, and report binary completion
   (pass^k) separately from partial progress.
-- **Name who owns the loop** before picking an OSS layer: browser-use (MIT) — the agent owns the
-  loop; Stagehand (MIT) — Playwright with AI escape hatches, you keep the loop; Playwright MCP
-  (Apache-2.0) — tooling exposed to whatever model already orchestrates, not an agent; Skyvern
-  (**AGPL-3.0** — its network clause bites if you modify it and serve it to users; flag it before
-  embedding in a hosted product).
-  Licenses via `gh api`, 2026-10-17 — re-verify.
+- **Name who owns the loop** before picking an OSS layer: browser-use — the agent owns the loop;
+  Stagehand — Playwright with AI escape hatches, you keep the loop; Playwright MCP — tooling
+  exposed to whatever model already orchestrates, not an agent; Skyvern — a vision-first agent
+  under AGPL-3.0. Licenses and their obligations: the table in `retrieval-and-rag.md` §7.
 
 ## Validation
 - Every run has a stated stop condition (step budget, goal-check, cost cap, or human callback) —

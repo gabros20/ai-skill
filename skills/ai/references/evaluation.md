@@ -165,9 +165,10 @@ When a published score must be read anyway (a launch claim, a shortlist filter),
    tasks broken, and retracted its own recommendation to use it as a leading coding eval
    (@OpenAI, x.com/OpenAI/status/2074972179385720836, 2026-07-08).
 
-Preference arenas measure taste, not task completion — style and sampling effects can inflate a
-rank ("The Leaderboard Illusion," arxiv.org/abs/2504.20879; @karpathy,
-x.com/karpathy/status/1917546757929722115). Never average an Elo with a resolve rate. Public
+Preference arenas measure taste, not task completion — undisclosed private-variant testing with
+selective disclosure and unequal sampling can inflate a rank and reward overfitting to the arena
+itself ("The Leaderboard Illusion," arxiv.org/abs/2504.20879), and a top-ranked model can feel
+worse in daily use (@karpathy, x.com/karpathy/status/1917546757929722115). Never average an Elo with a resolve rate. Public
 suites are **filters**; the decision is a private set scored per (model, harness, effort) — the
 cost-per-success procedure lives in `model-selection-and-routing.md` §1b. And a frozen small set
 over-optimized against becomes fake too: rotate a few tasks each cycle.

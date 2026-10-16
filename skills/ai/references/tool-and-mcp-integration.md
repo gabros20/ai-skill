@@ -30,7 +30,7 @@ Inputs:
 - Whether the MCP server is internal-only, a public registry entry, or a private/remote deployment
   crossing a network boundary.
 
-Produces: a named integration shape (direct API / CLI / MCP) with its trade-off, a tool contract
+Produces: a named integration shape (direct API / CLI / MCP / computer use) with its trade-off, a tool contract
 (schema + retry policy), and — if MCP — a pinned SDK/spec version and a stated consent/trust
 posture.
 
@@ -77,7 +77,9 @@ Order these **tools-first, GUI-fallback, screenshot-to-verify**. Adding typed to
 is not free: on OSWorld-MCP the same MCP tools improved a reasoning model by +4.0pp and degraded a
 non-reasoning one by −5.9pp, and even the model that benefited called a tool on only 55 of 309
 tasks — an "adoption gap" (arxiv.org/abs/2608.03327, 2026-08). Invest in tool semantics and the
-routing policy, then eval tool *adoption* per model, rather than only adding servers.
+routing policy rather than only adding servers — and eval adoption *and* held-out accuracy, never
+adoption alone: a dense tool-call bonus raised spreadsheet-tool adoption from 0.03 to 0.33 while held-out
+accuracy did not follow ("behavior is steerable; competence is not," same paper).
 
 **Default to a direct tool/function endpoint for a single-caller integration** — the same framing
 backend's `surface-agentic` uses: a bespoke tool endpoint is simpler for one caller, MCP earns its

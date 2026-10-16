@@ -26,6 +26,12 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 - MoE self-host sizing: memory follows *total* parameters (every expert is resident); active
   parameters set per-token speed. Added the four-question sizing method and the shared-prefix-cache
   isolation flag.
+- Model-selection §1 no longer names a provider lineup (the named models had gone legacy) and
+  restates the tier price spread as "an order of magnitude or more", dated and illustrative
+  (~40× flagship-to-fast, ~100× top-to-fast on Anthropic's models page, 2026-10-17), replacing the
+  stale "5–10×".
+- OSS web/browser license flags consolidated into one table (`retrieval-and-rag` §7); Crawl4AI's
+  appended attribution requirement stated.
 
 ## [0.1.0] — 2026-07-25
 
