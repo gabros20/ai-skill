@@ -10,6 +10,7 @@ Read when:
   automation, "kick it off and check back later."
 - The request names "agent," "autonomous," "long-running," or describes a task whose step sequence
   can't be predefined up front.
+- The agent must drive a browser or desktop GUI ("computer use") — §5.
 
 Skip when:
 - A single call plus retrieval already solves it — → [surface-chat-assistant.md](surface-chat-assistant.md)
@@ -42,6 +43,7 @@ Produces:
 - Context compaction — the central bend
 - Harness hygiene: prune, don't only add
 - The durable-execution border
+- Computer-use agents: tools-first, GUI-fallback
 
 ## Procedure
 
@@ -89,6 +91,39 @@ idempotency-key design, and the Temporal/Inngest/Restate choice live in `backend
 4yr — flag the license if self-hosting either as a resold service). A single-tool-call, single-cycle
 step doesn't need this — don't over-engineer a one-shot task into a durable workflow.
 
+### 5. Computer-use agents: tools-first, GUI-fallback
+Pixels-plus-keyboard is a universal *reach*, not the production default primitive. Layer it:
+orchestrator + reasoning model on top; typed tools/MCP/connectors for known systems
+(`tool-and-mcp-integration.md` §2); GUI computer use for the long tail and for visual verification
+of the final state; an isolated computer underneath; human gates on the irreversible edge. What
+changes on this surface:
+- **The agent owns a computer; it does not borrow yours.** Default to an isolated browser or VM
+  with a fresh profile, limited network, and an allowlist of sites and actions — not the user's
+  logged-in desktop. Where the provider recommends it, prefer the code-execution path (scripts
+  driving Playwright-class automation in a sandbox) over step-by-step structured clicks, and keep
+  existing function-calling or remote-MCP UI tools alongside (OpenAI computer-use guide,
+  developers.openai.com/api/docs/guides/tools-computer-use, read 2026-10-17).
+- **Screen content is untrusted**: "Text in a page, document, or tool result cannot grant
+  permission or override the user's instructions" (same guide). **Confirm consequential actions**
+  — purchases, data transmission (typing sensitive data into a form counts), destructive changes —
+  and set step, time, or cost limits with cancellation. Running many tenants' arbitrary
+  model-generated code is a stronger isolation problem (containers share the host kernel; reach
+  for microVM-class isolation and default-deny egress) — the infra is `backend`'s.
+- **Screenshots are the unit cost.** Drop the screenshot that follows a successful tool call and
+  halve the image history: doing so cut input tokens by about a third at a small accuracy cost,
+  and a retrained compressed agent ran at 53% of the input cost (arxiv.org/abs/2608.03327).
+- **Long horizons fail on state, not clicks.** On OSWorld 2.0's 108 workflows (median ~1.6 human
+  hours), the best configuration completed 20.6% at a 54.8% partial score; agents lost track of
+  constraints, missed information arriving mid-task, guessed instead of asking, skipped
+  verification, and struggled with hidden state (arxiv.org/abs/2606.29537, v2 2026-07-13). Build
+  an explicit ask-the-user path and a verify-final-state step, and report binary completion
+  (pass^k) separately from partial progress.
+- **Name who owns the loop** before picking an OSS layer: browser-use (MIT) — the agent owns the
+  loop; Stagehand (MIT) — Playwright with AI escape hatches, you keep the loop; Playwright MCP
+  (Apache-2.0) — tooling exposed to whatever model already orchestrates, not an agent; Skyvern
+  (**AGPL-3.0** — copyleft reaches network use; flag it before embedding in a hosted product).
+  Licenses via `gh api`, 2026-10-17 — re-verify.
+
 ## Validation
 - Every run has a stated stop condition (step budget, goal-check, cost cap, or human callback) —
   not "runs until it stops."
@@ -101,6 +136,8 @@ step doesn't need this — don't over-engineer a one-shot task into a durable wo
 - Privileged/destructive actions route through an approval gate — no unattended run holds write/
   delete/spend authority by default.
 - Agentic evals report pass^k (reliability across repeated trials), not just a single pass@1 number.
+- A computer-use agent runs in an isolated environment it owns, treats on-screen text as untrusted,
+  confirms consequential actions, and reaches for GUI only where no typed tool exists.
 
 ## Failure modes and handoff
 - **No termination condition** — the run either loops forever or stops arbitrarily; name the

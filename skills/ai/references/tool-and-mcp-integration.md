@@ -7,7 +7,7 @@ integration should be a direct API call, a CLI, or an MCP server, and which laye
 
 Read when:
 - The request is "wire this tool," "let the agent call X," "should this be an MCP server," or
-  compares direct API/CLI/MCP integration paths.
+  compares direct API/CLI/MCP/computer-use integration paths.
 - An agent needs to consume an existing MCP server (internal, vendor, or public registry).
 - A tool call keeps failing schema validation, or a tool's blast radius needs scoping.
 
@@ -36,7 +36,7 @@ posture.
 
 ## Contents
 - Tool contract = schema + validate-and-retry
-- Direct API vs CLI vs MCP
+- Direct API vs CLI vs MCP vs computer use
 - MCP anatomy
 - MCP spec status (re-verify)
 - The build chain: spec → SDK → FastMCP → registry
@@ -59,8 +59,10 @@ design against explicitly:
   produces calls that "succeed" from the model's view and 400 on execution.
 - **Ambiguous/overlapping tools** — token-costly and error-prone; keep the tool surface small and
   non-overlapping (Anthropic's ACI framing, anthropic.com/engineering/building-effective-agents).
+  One tool per backing index: a single `search` that silently hits different sources leaves the
+  model unable to tell a miss from the wrong index (web/vertical split: `retrieval-and-rag.md` §7).
 
-### 2. Direct API vs CLI vs MCP
+### 2. Direct API vs CLI vs MCP vs computer use
 Anthropic's own developer guidance frames this as an explicit decision, not "always MCP"
 (@ClaudeDevs, x.com/ClaudeDevs/status/2047086372666921217):
 
@@ -69,6 +71,13 @@ Anthropic's own developer guidance frames this as an explicit decision, not "alw
 | **Direct API call** | Single caller, capability already has a clean typed endpoint, no discovery needed | Cheapest in tokens/latency; no protocol overhead; not reusable across agent clients without re-wiring |
 | **CLI** | The capability already ships a CLI with good `--help`/man-page self-description an agent can read | Leans on existing tooling; less structured than a typed schema, weaker validation guarantees |
 | **MCP** | The capability must be reusable across multiple agent clients/products, or the caller is a generic host (Claude Desktop/Code, ChatGPT) that doesn't know your API ahead of time | Protocol + connection overhead; a context-efficient client (only load tool descriptions actually needed) matters at scale |
+| **Computer use (GUI)** | No API, CLI, or MCP exists — legacy UIs, one-off sites — or a visual check of the final state is needed | Vision tokens × many steps, multi-second actions, UI drift, on-screen injection surface; the escape hatch, not the default (`surface-autonomous-agent.md` §5) |
+
+Order these **tools-first, GUI-fallback, screenshot-to-verify**. Adding typed tools to a GUI agent
+is not free: on OSWorld-MCP the same MCP tools improved a reasoning model by +4.0pp and degraded a
+non-reasoning one by −5.9pp, and even the model that benefited called a tool on only 55 of 309
+tasks — an "adoption gap" (arxiv.org/abs/2608.03327, 2026-08). Invest in tool semantics and the
+routing policy, then eval tool *adoption* per model, rather than only adding servers.
 
 **Default to a direct tool/function endpoint for a single-caller integration** — the same framing
 backend's `surface-agentic` uses: a bespoke tool endpoint is simpler for one caller, MCP earns its
@@ -159,7 +168,8 @@ escalation, not the default.
   job; this ref stops at "the server's tool surface is well-designed."
 
 ## Validation
-- [ ] The integration path (direct API / CLI / MCP) is named with its reason — not MCP-by-default.
+- [ ] The integration path (direct API / CLI / MCP / computer use) is named with its reason — not
+      MCP-by-default, and GUI computer use only where no typed path exists or for verification.
 - [ ] Every tool's model-facing schema is generated from (or contract-tested against) its
       execution-side validation.
 - [ ] Schema-invalid calls retry with the validation error fed back, not a hard fail.
