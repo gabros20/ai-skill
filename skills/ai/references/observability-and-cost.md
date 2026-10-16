@@ -115,6 +115,12 @@ the cost dashboard will misattribute spend.
   caps (`max_total_tokens`, free-tier ceilings) are shipping as first-class product features
   (x-corpus, @_philschmid, Gemini Managed Agents). Budget at the org/feature level, not just
   per-call.
+- **Tool fees are a separate meter from tokens.** Search calls, fetched URLs, research runs,
+  vertical-API calls, and per-image/per-second media generation bill on their own units — attribute
+  each as its own cost line, or a dashboard that multiplies tokens by price undercounts agent
+  spend (`retrieval-and-rag.md` §7). Give research and generation runs a per-run ceiling, and
+  report agent features as **$ per successful task** (`model-selection-and-routing.md` §1b), not
+  $ per call.
 - **Jevons paradox — cheaper tokens don't mean lower total spend.** Efficiency gains expand usage,
   which expands aggregate cost (x-corpus, @swyx) — treat "we made it cheaper per call" as a
   forecast-revision trigger for total budget, not a cost-reduction win to bank uncritically.

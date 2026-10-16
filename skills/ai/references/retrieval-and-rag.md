@@ -2,14 +2,18 @@
 
 Purpose: Decide the shape of a system's retrieval behavior — how documents get chunked, how
 candidates get retrieved and fused, whether/how they get reranked, when to add an agentic
-decomposition layer over raw top-k, and which vector store the retrieval behavior is validated
-against. Owns the *behavior*, not the store's operation or the pipeline that populates it.
+decomposition layer over raw top-k, which vector store the retrieval behavior is validated
+against, and how an agent's open-web and vertical-database retrieval tools are split and routed.
+Owns the *behavior*, not the store's operation, the pipeline that populates it, or the index a
+search vendor sells.
 
 Read when:
 - The request is "make answers grounded in our docs," "add RAG," "search isn't finding the right
   chunk," "improve retrieval quality," or picks a vector store for a new retrieval feature.
 - Retrieval accuracy is being debugged and it's unclear whether the fault is retrieval (wrong
   chunks) or generation (right chunks, wrong answer).
+- An agent or chat needs live web search, page fetch, deep research, or a vertical lookup (places,
+  rates, quotes, posts) — §7.
 
 Skip when:
 - The vector store already exists and the ask is deploying/scaling/operating it (connection
@@ -45,7 +49,7 @@ Produces:
 - Stage 4: agentic decomposition layer (and when NOT to add it)
 - Stage 5: evaluate retrieval and generation separately
 - Vector-store decision
-- What NOT to build
+- Open-web and vertical retrieval as agent tools
 
 ## Procedure
 
@@ -154,6 +158,62 @@ uptime) is `backend`/`operate`'s. The vector store **as a governed dataset** (in
 source-of-truth lineage, access control on what gets indexed) is `data`'s. A single feature can
 cross all three — state which layer a given question is actually about before answering it.
 
+### 7. Open-web and vertical retrieval as agent tools
+"Search" is five jobs with different latency, failure modes, and bills — name which one a call
+does: **retrieve** (query a ranked index → URLs plus snippets or excerpts; the only job that needs
+a fresh web index), **fetch** (a known URL → the page), **parse** (page → main-content text; it
+doesn't know the question), **shape** (keep the passages that answer *this* question, or fill a
+schema), and **research** (a loop of the four across many queries → a cited report, in minutes).
+A sixth job is not the web at all: **vertical lookup** — a place ID, a rate, a quote, a post is a
+*row* in a database; a crawled page that mentions it is a citation, not the record (Google's
+Places API is its own Text Search / Nearby Search / Place Details-by-ID index,
+developers.google.com/maps/documentation/places/web-service/op-overview).
+
+| The question | Route to | Not |
+|---|---|---|
+| Already have the URL | fetch + shape (fetch with an objective) | A search |
+| Needs a field you'd put in a table | that database's own tool | Web search for "pages about it" |
+| Cited answer in ~a second | excerpt-shaped search; model answers from excerpts; fetch only on a miss | Fetching every hit |
+| Many searches, a description suffices | snippet search | Any fetch |
+| A report with a citation per claim | a research **job** — say it's a job | Hiding it inside the chat loop |
+| Watch a topic | a monitor/webhook on a saved query | A cron of uncapped searches |
+
+**Two web tools, not four**: `web_search` (ranked results with focused excerpts) and `web_fetch`
+(a specific URL, with an objective); the agent searches first and fetches only where needed
+(Parallel's extract guidance, docs.parallel.ai/extract/best-practices — without an objective, its
+Extract returns whole-page markdown, boilerplate included). No separate parse tool — parse lives
+inside fetch, and re-parsing a page you already hold excerpts for doubles the bill. **One tool per
+vertical index**, never one `search` that sometimes hits the web, sometimes maps, sometimes a
+ticker: the model can't tell a miss from the wrong index. The stop rule: **excerpts first, fetch
+on a miss (cap it at the one to three URLs the excerpts didn't answer), never full-page markdown
+on every hit** — excerpt/highlight output is the recommended agent default because it gives the
+evidence "without filling the context window" (Exa, exa.ai/docs/reference/search-api-guide-for-
+coding-agents); Anthropic's newer web-search tool versions go further and filter results with code
+before they reach context (platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool).
+A thin first search is not a reason to escalate to research: fetch once; if still thin, say so.
+
+**Deep research is a different product.** It is asynchronous — a run ID with `status: running`,
+then poll, webhook, or stream — and can take up to ~45 minutes (Parallel Task deep research,
+docs.parallel.ai/task-api/examples/task-deep-research, read 2026-10-17); bound it with a fixed
+effort or a per-run cost ceiling (Exa Agent's `budget.maxCostDollars`, exa.ai/docs/reference/
+agent-api-guide). Show progress if a person waits; never poll inside the chat model's token loop.
+Buy the vendor job when the output is a report; write your own loop only when the vendor's schema
+can't hold your output — then you own the runaway.
+
+**Buy the index, build the router.** The custom part is the router, the tool list, and the stop
+rule; the crawl, refresh, and ranking are a company. Self-host metasearch + a crawler only when the
+per-query fee is the problem and quality isn't; free keyless allowances are trials, not a
+production stack; and **pin the backend** — a failover ring that round-robins vendors means you
+don't know which index served a call, so neither cost nor quality is attributable. Meters differ
+and don't divide into each other: per call, per fetched URL, per research run, per vertical call,
+and model-native in-request search (Anthropic: $10 per 1,000 searches **plus** result tokens
+billed as input, errors unbilled — as of 2026-10-17, re-verify) — budget each as its own line
+(`observability-and-cost.md` §4). Before depending on a provider, run a small same-day probe on
+your own query mix — including non-English and freshness queries — and score citeable text,
+current date, and latency: modes carry language limits (Parallel's lowest-latency mode documents
+English and Japanese only, docs.parallel.ai/search/modes), and public search-provider boards
+measure a multi-turn research agent, not a one-second tool call.
+
 ## Validation
 - The chunking strategy names which document-context-loss problem it fixes and why (contextual vs.
   late), not just "we chunk."
@@ -167,6 +227,8 @@ cross all three — state which layer a given question is actually about before 
   reported as separate numbers, not one blended "RAG score."
 - The vector-store pick names the tradeoff against pgvector-as-default, or states why pgvector was
   sufficient.
+- Web retrieval exposes search and fetch as separate tools plus one tool per vertical index;
+  fetch runs on a miss, not per hit; a research job is async with a cost ceiling.
 
 ## Failure modes and handoff
 - **The real question is architectural** (RAG vs. long-context vs. agent-with-search-tools as a
