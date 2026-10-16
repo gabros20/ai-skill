@@ -45,8 +45,10 @@ Produces:
 ## Procedure
 
 ### 1. Provider/tier selection by price-per-intelligence
-Every major provider ships 3–5 tiers spanning roughly a **5–10× output-price gap** between flagship
-and cheapest tier. Pick by **price-per-intelligence for the task**, not by brand loyalty or "always
+Every major provider ships 3–5 tiers whose output prices span **an order of magnitude or more**
+between the top tier and the cheapest — read the actual spread off the live pricing page (on
+Anthropic's models page, read 2026-10-17, it was ~40× flagship-to-fast and ~100× top-to-fast;
+illustrative, re-verify). Pick by **price-per-intelligence for the task**, not by brand loyalty or "always
 use the flagship."
 
 The tier *structure* is stable; the specific model names, IDs, and prices churn monthly and **must
@@ -55,16 +57,14 @@ class in the skill, and the anti-staleness invariant applies in full. Re-check t
 `platform.claude.com/docs/en/about-claude/models/overview`, OpenAI's pricing page,
 `ai.google.dev/gemini-api/docs/pricing`, `docs.x.ai`.
 
-Anchor to the tier shape, not memorized names. At the time of writing, the Anthropic lineup is the
-**Claude 5 family plus the current-generation Opus and Haiku**: top-of-line **Fable 5**
-(`claude-fable-5`), the **Opus flagship** (`claude-opus-4-8`), mid-tier **Sonnet 5**
-(`claude-sonnet-5`), and fast **Haiku 4.5** (`claude-haiku-4-5`). Other providers mirror the same
-shape — OpenAI, Google (Gemini Pro / Flash tiers), and xAI (Grok) each publish a flagship / mid /
-small (often a nano) tier. **Name the current model and confirm every price per provider on its
+Anchor to the tier shape, not memorized names: each lineup is a **top / flagship / mid / fast**
+ladder (Anthropic's included), and OpenAI, Google, and xAI each publish the same flagship / mid /
+small (often a nano) shape. Read the current names and IDs from the models page — this document
+deliberately names none, because any it named would already be legacy. **Name the current model and confirm every price per provider on its
 live page at build time** rather than trusting any snapshot, including this one.
 
 > ⚠️ Do not copy a model/price table from memory or a stale doc into production. The decision shape
-> — a ~5–10× flagship-to-cheap spread, pick the cheapest tier that clears the accuracy bar — is what
+> — a spread of an order of magnitude or more from flagship to cheapest tier, pick the cheapest tier that clears the accuracy bar — is what
 > transfers; the specific cells are illustrative and out of date the moment they're written. A
 > "verified-live" claim frozen into a document is exactly the anti-pattern this skill teaches
 > against: re-verification is a step you run, not a checkbox you inherit.
@@ -96,8 +96,8 @@ that buys no extra `R`).
 The procedure, which keeps the anti-staleness invariant honest without re-running public suites on
 every launch:
 1. **Decide the task shape first** — repo repair, long shell work, multi-language edits, fresh
-   algorithms, chat taste. Public scores do not transfer across shapes, and preference Elo never
-   enters `C/R` (see `evaluation.md` §8 for reading a published score).
+   algorithms, chat taste. Public scores do not transfer across shapes; read any published score
+   through `evaluation.md` §8's checks.
 2. **Filter on public boards that report $/task**, not raw % — e.g. the Artificial Analysis Coding
    Agent Index reports cost, tokens, and time *per task* by model and agent
    (artificialanalysis.ai/agents/coding-agents, checked 2026-10-17 — re-verify its columns).
@@ -108,8 +108,8 @@ every launch:
 4. **Keep a running Pareto**: drop from the default anything both costlier and worse than another
    candidate (the "kill zone").
 5. **Cadence**: launch week → skim the boards, update the Pareto row, no private run; shortlist
-   change → rerun the private set; quarterly → rotate tasks and re-check whether each public
-   benchmark is still trusted (benchmarks die — `evaluation.md` §8).
+   change → rerun the private set; quarterly → rotate tasks and re-run `evaluation.md` §8's
+   still-trusted check on each board you filter with.
 
 The private-set mechanics (binary judging, dataset shape) are `evaluation.md`'s; this section owns
 using them to pick a model. Fill the cost-per-success block of
@@ -137,14 +137,16 @@ Bound escalation: cap depth at one hop (cheap → flagship, not a ladder), and l
 failure modes in practitioner routing guidance (skills-corpus, jpoindexter donor, paraphrased —
 no verbatim lift, source has no declared license).
 
-**Image/video generation routes the same way, on a different meter.** Tier by how hard the output
-will be scrutinized (a hero/brand asset → frontier tier; filler and drafts → the cheap tier),
-price per image or per second from the live page (aggregator and reseller rates drift from
-first-party ones), keep video opt-in per run — per-second billing makes one clip cost more than
-many stills — and give the run a spend ceiling. Drive a deterministic generation with a direct
-API call rather than wrapping it in an agentic CLI (latency and nondeterminism for no judgment
-gained), and set dimensions and duration through the API's own parameters (e.g. OpenAI's image
-`size`), never as words in the prompt.
+**Image/video generation routes the same way, on a different meter:**
+- Tier by how hard the output will be scrutinized (hero/brand asset → frontier tier; filler and
+  drafts → cheap tier); price per image or per second from the first-party page (aggregator and
+  reseller rates drift).
+- Keep video opt-in per run — per-second billing makes one clip cost more than many stills — and
+  give the run a spend ceiling.
+- Drive a deterministic generation with a direct API call, not an agentic CLI (latency and
+  nondeterminism for no judgment gained); set dimensions and duration through the API's
+  parameters where they exist (e.g. OpenAI's image `size`) — prompt words are an unreliable
+  substitute.
 
 ### 3. Fallback & degradation — degrade honestly, never silently
 **Routing and fallback are different problems**: routing picks the right tier for the task up
@@ -225,7 +227,8 @@ revenue- or MAU-gated clauses that require a separate deal above a threshold.
    checkpoint and quantization you will run — not the hosted API twin's score.
 4. **Legal?** The license read above. And confirm the weights are actually downloadable — an
    "open weights soon" announcement or a hosted-only "open" model is not a self-host option, and
-   downloadable is not the same as hostable when the model needs a rack.
+   downloadable is not the same as hostable when the model needs a rack — then call it as a hosted
+   open-weight API: you keep the license terms and lose the ops burden.
 
 Self-host `C` for §1b is (hardware amortization + power, idle included + ops time) ÷ tasks per
 month. Shard one model across devices only for **capacity**: if it fits one GPU, distributed
