@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.4.0] — 2026-10-17
+
+### Added
 - **Voice overlay** (`surface-voice`, additive, stacks on chat-assistant or autonomous-agent):
   cascade vs native speech-to-speech vs hybrid per node; STS failure modes (session caps and
   reconnect, fixed voice, audio/transcript divergence, quadratic input on token-billed sessions);
@@ -19,6 +24,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   with a calibrated judge; call guardrails outside the model; voice licence flags. Router row,
   `backend` decline for voice transport, `success`/`marketing` decline for support-line policy and
   call consent, a voice `downstream_requirements` row in `handoff`, and voice evals.
+
+### Fixed
+- `research/voice`: SIP REFER billing corrected (a bridged transfer keeps billing on Pipecat Cloud;
+  a SIP REFER removes Daily once the handoff succeeds), with an Errata section in the report.
+- `site/` and `llms.txt` list the `surface-voice` overlay (17 references).
 
 ## [0.3.0] — 2026-10-17
 
@@ -105,6 +115,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   language-agnostic; consumes architecture's contracts/threat-model and hands running behavior +
   eval suites + telemetry to `quality`/`operate`.
 
+[0.4.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.4.0
 [0.3.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.3.0
 [0.2.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.2.0
 [0.1.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.1.0
