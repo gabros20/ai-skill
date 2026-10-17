@@ -141,14 +141,14 @@ at list prices dated at the vendor's page.
 ### 6. Guardrails on a call
 - **Disclose AI at the first interaction**, using a pre-rendered or cached greeting, never one
   generated after answer. Never claim to be human. The legal rules belong to `success`
-  (`ai-support-policy.md`) for support lines and to `marketing` (`lifecycle-and-email.md` "The
-  consent decision rule") for outbound consent.
+  (`ai-support-policy.md` "AI voice support lines: disclose first, keep a person reachable") for support lines and to
+  `marketing` (`lifecycle-and-email.md` "Outbound AI-voice calls are automated calls") for outbound consent.
 - **Opt-out keywords and DTMF** are detected deterministically outside the LLM.
 - **Spell back critical data.** Normalize it in code, read it back in grouped chunks, and require an
   explicit yes. Offer DTMF entry when ASR confidence is low or the line is noisy.
 - **Human handoff.** An explicit request for a person transfers immediately. The handoff carries a
   summary, the intent, the data collected, and the reason (`success` `ai-support-policy.md`
-  "Escalation is symbolic, never a confidence float").
+  "AI voice support lines: disclose first, keep a person reachable").
 - **Runaway-call guards are configuration:** a maximum duration, an idle timeout, and voicemail
   detection on outbound calls.
 
