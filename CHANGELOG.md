@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.2.0] — 2026-10-17
+
+### Added
 - **Cost-per-success model picking** (`model-selection-and-routing` §1b): `R`/`C`/`C/R` per
   (model, harness, effort), a rotated private task set, a running Pareto, and a launch/shortlist/
   quarterly cadence; scorecard gains a cost-per-success block. Image/video generation routing on
@@ -56,4 +61,5 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   language-agnostic; consumes architecture's contracts/threat-model and hands running behavior +
   eval suites + telemetry to `quality`/`operate`.
 
+[0.2.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.2.0
 [0.1.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.1.0
