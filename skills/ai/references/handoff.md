@@ -68,7 +68,8 @@ match byte-for-byte, per `backend`'s `surface-agentic.md`), and vector-store/dat
 
 ## What `ai` hands downstream
 
-`ai` hands distinct artifacts to five distinct consumers — **do not conflate them.**
+`ai` hands distinct artifacts to five distinct consumers (plus `success` and `marketing` on a voice
+build) — **do not conflate them.**
 
 | Artifact | Primary consumer | What they take from it |
 |---|---|---|
@@ -79,6 +80,7 @@ match byte-for-byte, per `backend`'s `surface-agentic.md`), and vector-store/dat
 | Isolated-execution requirement: which tools run generated code, a browser, or untrusted files, with their egress, credential, and persistence needs | `backend` (environment adapter) · `operate` (provider and template) | `backend` builds the environment adapter and its controls — per-run identity, egress allowlist, no metadata service, scoped credentials, artifacts persisted before teardown (`surface-agentic.md` "Run control: approvals, version pins, budgets, linked lifecycles"); `operate` picks the provider, sizes capacity, monitors teardown, and pins the sandbox template digest (`surface-ai-system.md` "Agent sandboxes in production" and its release manifest) — `ai` names what needs isolation, not how it is hosted |
 | The turn/streaming behavioral contract (what renders, when a tool call pauses the turn, the exact action an approval card previews, resume after a disconnect — closing the client never cancels the run) | `frontend` | what to build the chat/agent UI against — `ai` defines the behavior, `frontend` codes the render |
 | Vector-store schema and retrieval-freshness assumptions (when retrieval is grounded in a governed dataset) | `data` | what the ingestion pipeline must produce and keep current for `ai`'s retrieval behavior to hold |
+| Voice requirement (on a [surface-voice](surface-voice.md) build): the architecture per node, the latency target at the caller's ear, the barge-in policy (history holds only what was heard), and the call guardrails (pre-rendered disclosure, opt-out and handoff checks outside the model) | `backend` (transport) · `operate` (running the calls) · `quality` (independent gate) · `success` / `marketing` (the rules) | `backend` builds the media transport (WebRTC, WebSocket, SIP), playback clear/truncate, and reconnect for capped sessions (`surface-realtime.md`). `operate` owns per-minute cost, concurrency limits, the voice latency SLI at p95, and recording retention and audio-vs-transcript redaction (`surface-ai-system.md` "Time-to-first-token is a distinct SLI from total duration"). `quality` verifies at the caller's ear with simulated callers in noise, using its own calibrated judge (`surface-ai-system.md` "Judge validity"). `success` (`ai-support-policy.md`) and `marketing` (`lifecycle-and-email.md` "The consent decision rule") own the disclosure and consent rules the guardrails implement. `ai` decides what the agent hears, says, and refuses; it does not own those substrates |
 | Permission-scoped retrieval and deletion-propagation requirement: which sources each caller may query, and what a source deletion or permission revoke must invalidate in the corpus and its index | `data` | the source-ACL capture and the delete/revoke path through the corpus and its index; memory-record forget stays `ai`'s (`memory.md` "Governed memory — applies to all four philosophies") |
 
 Each consumer is a consumer, not a co-author: `ai` ships the harness, config, and eval suite; it does
@@ -92,10 +94,10 @@ sibling `architecture` and `backend` skills' handoffs: only `objective` is requi
 field may be empty, and a consumer must tolerate it absent rather than treat absence as a schema
 violation. `artifacts_created` entries use `type` values: `harness`, `eval-suite`, `model-config`,
 `tool-contract`, `retrieval-config`. `recommended_next` names the actual next skill(s) — `quality`,
-`operate`, `backend`, `frontend`, `data` — never a vague "further work needed."
-`downstream_requirements` mirrors the four requirement rows above (external-action safety,
-isolated execution, approval and reconnect, scoped retrieval and deletion); each entry is a
-decision or "N/A because …", never left silently blank on an agentic build.
+`operate`, `backend`, `frontend`, `data` (and `success`/`marketing` on a voice build) — never a vague "further work needed."
+`downstream_requirements` mirrors the requirement rows above (external-action safety, isolated
+execution, approval and reconnect, scoped retrieval and deletion, and voice on a voice build); each
+entry is a decision or "N/A because …", never left silently blank on an agentic build.
 
 ## Per-consumer needs
 

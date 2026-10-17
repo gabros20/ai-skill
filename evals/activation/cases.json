@@ -53,5 +53,20 @@
     "id": "negative-quality-independent-gate",
     "prompt": "Independently red-team and sign off our model as a release gate before we ship.",
     "should_trigger": false
+  },
+  {
+    "id": "positive-voice-phone-agent",
+    "prompt": "We're building an AI phone agent that books appointments. Should we use a realtime speech-to-speech model or an STT-LLM-TTS cascade, and why does it keep talking over callers?",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-backend-voice-transport",
+    "prompt": "Set up the WebRTC and SIP media server for our voice app, with Twilio media-stream WebSocket handling, jitter buffers and reconnects.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-success-support-line-policy",
+    "prompt": "Write the policy for our AI phone support line: when callers must be offered a human, what we announce about recording, and how long we keep recordings.",
+    "should_trigger": false
   }
 ]

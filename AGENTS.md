@@ -45,7 +45,7 @@ never silently invokes a sibling skill.
 2. Keep runtime frontmatter to `name` and `description`. Versions/metadata live in
    `.codex-plugin/plugin.json`, `CHANGELOG.md`, tags, and releases — never in `SKILL.md`.
 3. Keep `SKILL.md` the direct router: one primary job × ≤1 base surface (+ additive multi-agent
-   overlay), plus the "Not this skill →" decline table. References are flat, directly linked,
+   and voice overlays), plus the "Not this skill →" decline table. References are flat, directly linked,
    self-describing, loaded only when their conditions apply.
 4. Every reference begins with `Purpose / Read when / Skip when / Inputs / Produces`; add a
    `## Contents` when it exceeds ~100 lines. Dense is acceptable; some refs intentionally exceed the

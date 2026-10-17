@@ -6,9 +6,9 @@
 
 Build **the model-powered behavior of a product** — model selection and routing, the prompt/context
 harness, structured outputs, tool and MCP consumption, the agent loop, retrieval/RAG, memory, evals,
-guardrails, and AI cost/observability — across chat, autonomous-agent, RAG, batch, and multi-agent
-systems, in any provider or language. `ai` is the **intelligence layer of the Build stage** of the
-[Digital Product Skills](https://github.com/gabros20) family, peer of `frontend` and `backend`: an
+guardrails, and AI cost/observability — across chat, voice, autonomous-agent, RAG, batch, and
+multi-agent systems, in any provider or language. `ai` is the **intelligence layer of the Build
+stage** of the [Digital Product Skills](https://github.com/gabros20) family, peer of `frontend` and `backend`: an
 agent skill for building the part of a product whose core uncertainty or capability comes from a
 model.
 
@@ -28,8 +28,9 @@ tool & MCP integration · agent construction · retrieval & RAG · memory · **e
 guardrails & safety · observability & cost.
 
 **Surface overlays** — chat assistant (default) · autonomous agent · RAG app · batch & pipeline ·
-**multi-agent** (additive). The base surface reshapes how every job applies for that deployment
-shape; `surface-multi-agent` stacks on top of whichever base surface applies rather than replacing it.
+**multi-agent** (additive) · **voice** (additive). The base surface reshapes how every job applies
+for that deployment shape; `surface-multi-agent` and `surface-voice` stack on top of whichever base
+surface applies rather than replacing it.
 
 **The differentiator:** three things most AI material skips. **Evaluation is the flagship** — not an
 afterthought: error-analysis-first, LLM-as-judge via critique-shadowing, jury and role-binding,
@@ -85,7 +86,7 @@ $ai our context is bloated and slow — prune the harness before we add more
 | Add guardrails/safety — moderation, rails, validators, code-exec guards, approval gates, red-team | [guardrails-and-safety](skills/ai/references/guardrails-and-safety.md) | Uniform 5-way controls table + self-audit, prompt self-verification, validate-the-guardrail-like-a-judge |
 | Instrument AI cost and behavior — traces, token/cost/latency/cache, online-eval monitors | [observability-and-cost](skills/ai/references/observability-and-cost.md) | OTel-GenAI `gen_ai.*` semconv, cache-as-architecture, cost-lever ordering, license-pattern read |
 
-**Surface overlay (add at most one base; the multi-agent overlay stacks additively):**
+**Surface overlay (add at most one base; the multi-agent and voice overlays stack additively):**
 
 | System type | Reads | Reshapes |
 |---|---|---|
@@ -93,6 +94,7 @@ $ai our context is bloated and slow — prune the harness before we add more
 | Autonomous agent — long-horizon loop, runs unattended | [surface-autonomous-agent](skills/ai/references/surface-autonomous-agent.md) | Compaction/JIT/note-taking as structural, harness-hygiene on model upgrades, approval-gate default, durable-execution border, pass^k |
 | RAG / knowledge app — retrieval-centric, grounded | [surface-rag-app](skills/ai/references/surface-rag-app.md) | retrieval-and-rag as spine, citations as a schema contract, cite-or-retract guardrail, index-staleness monitored |
 | Batch / pipeline — offline classify/extract at scale | [surface-batch-and-pipeline](skills/ai/references/surface-batch-and-pipeline.md) | Cheap-tier routing default, cost-lever ordering, schema-heavy output, offline/regression eval only |
+| **Voice** — phone/call agents and voice assistants, stacked additively on the base surface | [surface-voice](skills/ai/references/surface-voice.md) | Cascade vs STS vs hybrid per node, latency at the caller's ear, the false-yield/swallowed-interruption pair, components picked on language per mode, audio evals in noise, call guardrails outside the model, licence lock-in flags |
 | **Multi-agent** — orchestrated specialists, stacked additively on the base surface | [surface-multi-agent](skills/ai/references/surface-multi-agent.md) | **Orchestrator + tool-scoped specialists (not swarms), the honest when-NOT-to-multi-agent (~15× tokens), four shapes, per-base composition** |
 
 Plus [handoff](skills/ai/references/handoff.md) — the `handoff.yaml` companion (with `volatile_facts`)

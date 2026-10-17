@@ -69,6 +69,9 @@ downstream_requirements:            # mirrors references/handoff.md "What `ai` h
   scoped_retrieval_and_deletion: "" # data: per-caller sources; source-ACL capture and the
                                     # delete/revoke path through the corpus and its index
                                     # (memory-record forget stays ai's, memory.md §2b)
+  voice: ""                         # surface-voice builds only: backend transport + reconnect;
+                                    # operate per-minute cost, concurrency, latency SLI, recording
+                                    # retention; quality caller's-ear gate; success/marketing rules
 
 threat_model_border:
   controls_implemented_by_ai: []        # guardrails/approval-gates ai implemented here

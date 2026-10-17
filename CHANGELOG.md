@@ -8,7 +8,17 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- **Voice overlay** (`surface-voice`, additive, stacks on chat-assistant or autonomous-agent):
+  cascade vs native speech-to-speech vs hybrid per node; STS failure modes (session caps and
+  reconnect, fixed voice, audio/transcript divergence, quadratic input on token-billed sessions);
+  latency at the caller's ear with endpointing and LLM first token dominating; three end-of-turn
+  detector types, eager end-of-turn as an LLM-cost multiplier, STT finalization; interruption as
+  the false-yield / swallowed-interruption pair with history holding only what was heard; speech
+  components picked on language per mode, finalization and billing unit (Hungarian as the worked
+  case, turn detection the binding constraint); a speech-layer cost formula; audio evals in noise
+  with a calibrated judge; call guardrails outside the model; voice licence flags. Router row,
+  `backend` decline for voice transport, `success`/`marketing` decline for support-line policy and
+  call consent, a voice `downstream_requirements` row in `handoff`, and voice evals.
 
 ## [0.3.0] — 2026-10-17
 

@@ -2,9 +2,9 @@
 name: ai
 description: >-
   Build model-powered behavior — model routing, context engineering, structured outputs, tools/MCP,
-  agents, RAG, memory, evals, guardrails, and cost/observability — across chat, agent, RAG, batch,
-  and multi-agent systems, any provider or language. Use to route a model, engineer context, build
-  an agent or tool loop, add RAG, web search, or memory, write evals, or add guardrails. Not for system/threat
+  agents, RAG, memory, evals, guardrails, and cost/observability — across chat, voice, agent, RAG,
+  batch, and multi-agent systems, any provider/language. Use to route a model, engineer context, build
+  an agent or tool loop, add RAG, web search, or memory, write evals or guardrails. Not for system/threat
   design (→ architecture), serving or MCP hosting (→ backend), data pipelines (→ data), chat UI
   (→ frontend), independent QA (→ quality), deploy (→ operate), or deterministic workflows
   (→ automation).
@@ -35,9 +35,10 @@ composition workflow.
 
 1. Pick the **one primary job** the request needs (most requests are one — name it).
 2. Add **at most one base surface** — the deployment shape reshapes how every job applies.
-3. **The multi-agent overlay is additive.** When the system is *also* multi-agent, stack
-   `surface-multi-agent` **on top of** the chosen base surface — it does not replace it. A
-   multi-agent RAG app is `surface-rag-app` **+** `surface-multi-agent`.
+3. **The multi-agent and voice overlays are additive.** When the system is *also* multi-agent,
+   stack `surface-multi-agent` **on top of** the chosen base surface — it does not replace it. A
+   multi-agent RAG app is `surface-rag-app` **+** `surface-multi-agent`; a phone agent is
+   `surface-autonomous-agent` **+** `surface-voice`.
 4. **Retrieval-first / anti-staleness:** before generating any model/SDK/provider-specific code or
    quoting any model name, price, version, or spec revision, **re-verify it against the live source**
    (pricing page, `npm view`/PyPI, HF model card, the spec changelog) — this layer churns monthly and
@@ -62,9 +63,9 @@ composition workflow.
 
 ### Surface overlay (add at most one base surface)
 
-Pick the one base surface that matches the deployment shape; `surface-multi-agent` stacks additively
-on top of it (step 3). Surfaces **reshape** how the jobs apply — they point to the job references,
-they don't redefine them.
+Pick the one base surface that matches the deployment shape; `surface-multi-agent` and
+`surface-voice` stack additively on top of it (step 3). Surfaces **reshape** how the jobs apply —
+they point to the job references, they don't redefine them.
 
 | System type | Read | Reshapes |
 |---|---|---|
@@ -72,6 +73,7 @@ they don't redefine them.
 | Autonomous agent — long-horizon loop, tools, runs unattended, incl. computer-use (GUI) agents | [surface-autonomous-agent](references/surface-autonomous-agent.md) | Compaction/JIT/note-taking/sub-agent-isolation as structural, harness-hygiene on every model upgrade, approval-gate default, durable-execution border, computer use in an owned sandbox (tools-first, GUI-fallback), pass^k |
 | RAG / knowledge app — retrieval-centric, grounded, citation-bearing | [surface-rag-app](references/surface-rag-app.md) | retrieval-and-rag is the spine, citations as a schema contract, cite-or-retract as the load-bearing guardrail, index-staleness as a monitored failure |
 | Batch / pipeline — offline classify/extract at scale, no human in loop | [surface-batch-and-pipeline](references/surface-batch-and-pipeline.md) | Cheap-tier routing default, cost-lever ordering (cascade→batch-50%→cache→effort-floor), schema-heavy output, offline/regression eval only |
+| **Voice (additive)** — the system listens and answers in audio: phone/call agents, voice assistants, speech-to-speech. **Stacks on, does not replace.** | [surface-voice](references/surface-voice.md) | Cascade-vs-STS-vs-hybrid per node, latency at the caller's ear (endpointing + LLM first token dominate), the false-yield/swallowed-interruption pair, components picked on language per mode + finalization + billing unit, audio evals in noise, call guardrails outside the model, licence lock-in flags |
 | **Multi-agent ⭐ (additive)** — orchestrated specialists on top of a base shape. **Stacks on, does not replace.** | **[surface-multi-agent](references/surface-multi-agent.md)** | **Orchestrator + tool-scoped specialists (not swarms), the honest when-NOT-to-multi-agent (coordination cost, ~15× tokens), four shapes, per-base composition** |
 
 ### Not this skill → (route elsewhere before acting)
@@ -79,12 +81,13 @@ they don't redefine them.
 | The request is really… | Route to | Why |
 |---|---|---|
 | System boundaries, contracts, NFR budgets, threat model, or build-vs-buy of the AI subsystem | `architecture` | `ai` implements *inside* that decision; it doesn't make the system-shape call |
-| Hosting/scaling/authing an MCP or tool *server*, the vector store *as served infra*, a model gateway, or durable-execution *infrastructure* | `backend` | `ai` owns consumption + behavior; the substrate is backend's |
+| Hosting/scaling/authing an MCP or tool *server*, the vector store *as served infra*, a model gateway, durable-execution *infrastructure*, or voice media transport (WebRTC/SIP/telephony streams) | `backend` | `ai` owns consumption + behavior; the substrate is backend's |
 | The vector store *as a governed dataset*, the ETL/ingestion that populates it, retention/PII | `data` | `ai` owns retrieval *behavior*; the dataset + pipeline is data's |
 | Chat UI, streaming *rendering*, error/recovery UX | `frontend` | `ai` decides *what* streams; frontend renders it |
 | Independent, adversarial verification / red-team *as a release gate* | `quality` | `ai` builds evals *into* the product; quality verifies independently |
 | Deploying the system or running the monitoring *platform*, incident response | `operate` | `ai` defines AI-specific telemetry; operate runs the platform |
 | A deterministic multi-system workflow — even when one step calls a model | `automation` | Model-in-a-step ≠ model-driven; the coordination is automation's |
+| The policy for an AI support line (disclosure, escalation, recording duties) or consent law for outbound AI calls | `success` · `marketing` | `ai` builds the call mechanics those rules require; the rules are theirs |
 
 ## Universal invariants
 
@@ -125,8 +128,8 @@ they don't redefine them.
 
 1. Inspect the request, the codebase, and any upstream artifacts (contracts, NFR budgets, threat
    model, a `handoff.yaml`); record material assumptions and unresolved inputs with owners.
-2. Route (above): one primary job, ≤1 base surface, `surface-multi-agent` stacked additively if the
-   system is multi-agent. Re-verify volatile model/SDK facts before any model-specific code; read
+2. Route (above): one primary job, ≤1 base surface, `surface-multi-agent` / `surface-voice` stacked
+   additively if the system is multi-agent or spoken. Re-verify volatile model/SDK facts before any model-specific code; read
    selected refs fully.
 3. Produce the artifact grounded in what the reference names — concrete pick + what-NOT + trade-off,
    capped at 3–5 decisions per pass, subtracting where the simpler thing wins.
@@ -169,7 +172,7 @@ reference's contribution — this is the index.
   rag · memory · evaluation ⭐ · guardrails-and-safety · observability-and-cost.
 - **Surface overlays** ([references/](references/)): surface-chat-assistant (default) ·
   surface-autonomous-agent · surface-rag-app · surface-batch-and-pipeline · surface-multi-agent ⭐
-  (additive).
+  (additive) · surface-voice (additive).
 - **Pipeline:** [handoff](references/handoff.md) — standalone vs pipeline behavior and the
   `handoff.yaml` companion (with `volatile_facts`) consumed by `quality`, `operate`, `backend`,
   `frontend`, and `data`.

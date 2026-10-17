@@ -76,5 +76,17 @@
     "prompt": "Design the threat model and system boundaries for our agent platform.",
     "expected_references": [],
     "forbidden_references": ["references/agent-construction.md", "references/surface-autonomous-agent.md"]
+  },
+  {
+    "id": "voice-call-agent-overlay",
+    "prompt": "Our outbound call agent has 1.5 s pauses before it answers and cuts people off mid-sentence. Fix the turn-taking.",
+    "expected_references": ["references/surface-voice.md", "references/surface-autonomous-agent.md"],
+    "forbidden_references": ["references/surface-multi-agent.md", "references/surface-batch-and-pipeline.md"]
+  },
+  {
+    "id": "decline-voice-transport-to-backend",
+    "prompt": "Our SIP trunk drops media and the WebSocket audio stream needs resampling from 8 kHz mu-law. Fix the transport.",
+    "expected_references": [],
+    "forbidden_references": ["references/surface-voice.md", "references/agent-construction.md"]
   }
 ]
