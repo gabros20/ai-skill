@@ -95,6 +95,11 @@ default demonstrably fails the task. Add exactly the piece that's failing, verif
   a one-off offline eval.
 - The chat-UI/streaming-render border is named when the request touches both this surface and
   `frontend`.
+- **Component coverage**: the design states, per component — context management, retrieval,
+  memory, tools/MCP, durable-execution owner, sandbox, approvals and action ledger,
+  streaming/event contract, evals, guardrails, observability/cost — its decision or "N/A because
+  …"; none is silently absent. Durable execution and sandbox are often N/A here because the turn
+  stays on the request path — say so.
 
 ## Failure modes and handoff
 - **Reaching for an agent loop or multi-agent orchestrator on turn one** — start with the single

@@ -141,6 +141,11 @@ changes on this surface:
 - Agentic evals report pass^k (reliability across repeated trials), not just a single pass@1 number.
 - A computer-use agent runs in an isolated environment it owns, treats on-screen text as untrusted,
   confirms consequential actions, and reaches for GUI only where no typed tool exists.
+- **Component coverage**: the design states, per component — context management, retrieval,
+  memory, tools/MCP, durable-execution owner, sandbox, approvals and action ledger,
+  streaming/event contract, evals, guardrails, observability/cost — its decision or "N/A because
+  …"; none is silently absent. On this surface the durable-execution owner, sandbox, and approvals
+  are rarely N/A.
 
 ## Failure modes and handoff
 - **No termination condition** — the run either loops forever or stops arbitrarily; name the

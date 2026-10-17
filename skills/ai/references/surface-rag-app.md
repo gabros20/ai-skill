@@ -87,6 +87,10 @@ governance question into this surface's behavioral scope.
   it's monitored, not assumed fresh.
 - The retrieval-behavior / served-infrastructure / governed-dataset border (§3) is named whenever a
   request could plausibly belong to more than one.
+- **Component coverage**: the design states, per component — context management, retrieval,
+  memory, tools/MCP, durable-execution owner, sandbox, approvals and action ledger,
+  streaming/event contract, evals, guardrails, observability/cost — its decision or "N/A because
+  …"; none is silently absent. Memory is often N/A here because the corpus is external — say so.
 
 ## Failure modes and handoff
 - **The agentic-decomposition layer is added reflexively** instead of being justified by a retrieval

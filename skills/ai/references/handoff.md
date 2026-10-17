@@ -75,8 +75,11 @@ match byte-for-byte, per `backend`'s `surface-agentic.md`), and vector-store/dat
 | Harness spec (system prompt, tools available, context-management policy) + eval suite + eval results | `quality` | the starting point for *independent* verification — `quality` re-derives its own adversarial/red-team eval against the same task, it does not simply re-run `ai`'s eval suite and call that independent |
 | Model/routing config, cost telemetry hooks, guardrail/approval-gate points | `operate` | what to deploy and monitor — dashboards/alerts on cost, latency, cache-hit rate, and guardrail trigger rate; `ai` instruments the hooks, `operate` owns the dashboard/alert/deploy pipeline |
 | Tool/MCP contract the agent expects to call, any durable-execution requirement identified | `backend` | the endpoint/substrate to build or confirm — `ai` defines the contract shape and behavior, `backend` implements and serves it |
-| The turn/streaming behavioral contract (what renders, when a tool call pauses the turn) | `frontend` | what to build the chat/agent UI against — `ai` defines the behavior, `frontend` codes the render |
+| External-action safety requirement: which tools write or spend, their risk class, which pause the run for approval, which need an operation-ledger entry | `backend` | the replay-safe mechanics to build (ledger, idempotency, approval as a paused run that re-checks grants on resume) — `ai` classifies the actions, `backend` makes them safe to retry |
+| Isolated-execution requirement: which tools run generated code, a browser, or untrusted files, with their egress, credential, and persistence needs | `backend` / `operate` | the sandbox to provision and run — `ai` names what needs isolation, not how it is hosted |
+| The turn/streaming behavioral contract (what renders, when a tool call pauses the turn, the exact action an approval card previews, resume after a disconnect — closing the client never cancels the run) | `frontend` | what to build the chat/agent UI against — `ai` defines the behavior, `frontend` codes the render |
 | Vector-store schema and retrieval-freshness assumptions (when retrieval is grounded in a governed dataset) | `data` | what the ingestion pipeline must produce and keep current for `ai`'s retrieval behavior to hold |
+| Permission-scoped retrieval and deletion-propagation requirement: which sources and memory scopes each caller may query, and what a forget or revoke must invalidate | `data` | the source-ACL capture and delete/revoke path the corpus and memory store must honor (`memory.md` §2b) |
 
 Each consumer is a consumer, not a co-author: `ai` ships the harness, config, and eval suite; it does
 not run the independent security scan, the production dashboard, the endpoint, the UI, or the
@@ -90,6 +93,9 @@ field may be empty, and a consumer must tolerate it absent rather than treat abs
 violation. `artifacts_created` entries use `type` values: `harness`, `eval-suite`, `model-config`,
 `tool-contract`, `retrieval-config`. `recommended_next` names the actual next skill(s) — `quality`,
 `operate`, `backend`, `frontend`, `data` — never a vague "further work needed."
+`downstream_requirements` mirrors the four requirement rows above (external-action safety,
+isolated execution, approval and reconnect, scoped retrieval and deletion); each entry is a
+decision or "N/A because …", never left silently blank on an agentic build.
 
 ## Per-consumer needs
 
@@ -118,7 +124,8 @@ resolves to a real harness spec/eval suite/config; `assumptions` and `risks` tra
 recorded during the build, not invented at handoff time; every `unresolved` item names an owner;
 `recommended_next` names an actual sibling skill, not a vague call for more work; if a threat model
 was consumed, the border between `ai`-implemented guardrails and `quality`-verified controls is
-stated explicitly; every volatile fact (model name, price, SDK version) referenced from the harness
+stated explicitly; on an agentic build every `downstream_requirements` entry is a decision or
+"N/A because …"; every volatile fact (model name, price, SDK version) referenced from the harness
 carries its date stamp and re-verify note, per this skill's anti-staleness invariant — don't let a
 frozen model name or price slip into the handoff uncaveated.
 

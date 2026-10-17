@@ -89,6 +89,11 @@ bending this one to cover it.
 - Item independence is confirmed, or the cross-item coordination need is named and routed to
   [surface-multi-agent.md](surface-multi-agent.md).
 - Cost/item and failure rate are tracked per run, not just aggregate spend.
+- **Component coverage**: the design states, per component — context management, retrieval,
+  memory, tools/MCP, durable-execution owner, sandbox, approvals and action ledger,
+  streaming/event contract, evals, guardrails, observability/cost — its decision or "N/A because
+  …"; none is silently absent. Streaming and approvals are usually N/A here because no human is in
+  the loop — say so.
 
 ## Failure modes and handoff
 - **Every item routed to the flagship tier by default** — apply the cascade (§2.1) before accepting
