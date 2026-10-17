@@ -7,6 +7,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+### Added
+- Queue unreleased changes here.
+
+## [0.4.1] — 2026-10-17
+
 ### Fixed
 - Description: voice transport (WebRTC/SIP/telephony streams) now routes to `backend` alongside
   serving and MCP hosting, so a media-server request does not trigger `ai` on the word "voice";
@@ -119,6 +124,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   language-agnostic; consumes architecture's contracts/threat-model and hands running behavior +
   eval suites + telemetry to `quality`/`operate`.
 
+[0.4.1]: https://github.com/gabros20/ai-skill/releases/tag/v0.4.1
 [0.4.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.4.0
 [0.3.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.3.0
 [0.2.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.2.0
