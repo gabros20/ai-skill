@@ -90,6 +90,12 @@ Adversarial testing that a guardrail (or the underlying model) actually holds:
 - **NeMo's LLM Vulnerability Scanning** — benchmarks how much a given rails config actually blocks
   jailbreaks/prompt injection on a reference bot, backed by a published paper (arXiv:2310.10501).
 
+For an agent, keep OWASP's abuse-case matrix as repeatable cases — prompt override, tool misuse,
+privilege escalation, memory poisoning, data exfiltration, recursive tool abuse, approval bypass
+(only a valid, unexpired, parameter-bound approval executes), multi-agent chaining — and re-run it
+after any change to prompts, tools, memory, retrieval, policies, or model provider
+(cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html, read 2026-10-17).
+
 ### 5. Validate the guardrail like a judge — the gap nobody covers
 Guardrails are shipped and trusted far more often than they're measured. Apply the same discipline
 [evaluation.md](evaluation.md) applies to LLM judges: build a labeled adversarial set (known-bad
@@ -107,7 +113,8 @@ public benchmark transfers.
 - Classifier-moderation output is consumed as a signal combined with other logic, never as a sole
   blocker.
 - Any approval-gate/HITL path is reachable for every irreversible action identified.
-- Red-team results (promptfoo/CyberSecEval/Inspect) exist for any layer treated as a hard control.
+- Red-team results (promptfoo/CyberSecEval/Inspect) exist for any layer treated as a hard control;
+  an agent's OWASP abuse-case matrix re-runs on every prompt/tool/memory/retrieval/provider change.
 - FP/FN rate against an adversarial labeled set is reported for the guardrail itself — see
   [guardrails-controls-checklist.md](../assets/guardrails-controls-checklist.md).
 

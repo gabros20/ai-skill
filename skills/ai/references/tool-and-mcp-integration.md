@@ -62,6 +62,21 @@ design against explicitly:
   One tool per backing index: a single `search` that silently hits different sources leaves the
   model unable to tell a miss from the wrong index (web/vertical split: `retrieval-and-rag.md` §7).
 
+**Load tools and skills from a versioned capability registry**, not a hard-coded list:
+- **Tool entry**: ID, version, owner, input/output schemas, required scopes, resource restrictions,
+  risk class (read vs write, rated by reversibility, sensitivity, financial effect, visibility),
+  timeout, rate limit, retry policy, idempotency support, data classification, telemetry rules.
+- **Skill entry**: ID, version, description, trusted publisher, compatible tools, instruction and
+  reference files, tests or examples, sandbox dependencies. Load metadata first, full instructions
+  only when selected; a third-party skill or bundled script is a dependency that gets reviewed.
+- **Discovery is filtered by grants before ranking.** On-demand loading keeps a large catalog out of
+  context (Anthropic's Tool Search Tool with `defer_loading`, anthropic.com/engineering/
+  advanced-tool-use, 2025-11-24; Cursor loads only the MCP tools needed, cursor.com/blog/
+  dynamic-context-discovery, 2026-01-06) — rank only tools the verified caller may use, never
+  reveal another tenant's, and re-authorize at execution: discovery filtering is not authorization.
+- **Bound the output**: a large tool result goes to a file the agent can inspect, not into context
+  (same Cursor post).
+
 ### 2. Direct API vs CLI vs MCP vs computer use
 Anthropic's own developer guidance frames this as an explicit decision, not "always MCP"
 (@ClaudeDevs, x.com/ClaudeDevs/status/2047086372666921217):
@@ -175,6 +190,8 @@ escalation, not the default.
 - [ ] Every tool's model-facing schema is generated from (or contract-tested against) its
       execution-side validation.
 - [ ] Schema-invalid calls retry with the validation error fed back, not a hard fail.
+- [ ] Tools and skills come from a versioned registry with a risk class; discovery is filtered by
+      the caller's grants before ranking, and execution re-checks authorization.
 - [ ] If MCP: SDK major version is pinned (v1 for production), and the spec revision cited is
       re-verified against modelcontextprotocol.io/specification, not assumed from this document.
 - [ ] MCP client consent/trust flow is explicit for tool invocation and any server-initiated

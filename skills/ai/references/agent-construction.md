@@ -195,12 +195,22 @@ Retrieval-first — re-verify star counts/versions before citing (all figures be
 |---|---|---|
 | Python, graph-first | **LangGraph** (MIT, ~38k★) — durable checkpointing, HITL interrupts, subgraphs | Don't hand-roll checkpointing/replay when a graph engine already solves it |
 | Python, loop-first, type-safety | **Pydantic-AI** (MIT, ~18k★) — validated deps/output, composable "capabilities" | — |
-| Python, opinionated batteries-included harness | **DeepAgents** (MIT, ~26k★) — planning + sub-agent isolation + FS + compaction, Claude-Code-shaped | Don't rebuild context-management primitives DeepAgents already ships |
+| Python, opinionated batteries-included harness | **DeepAgents** (MIT, ~26k★) — planning + sub-agent isolation + FS + compaction, Claude-Code-shaped | Don't rebuild context-management primitives DeepAgents already ships; don't treat its virtual filesystem as a sandbox — the local-shell backend has no isolation, so run code only through an isolated sandbox backend (docs.langchain.com/oss/python/deepagents/backends, read 2026-10-17) |
 | Vendor-anchored, simplest mental model | **OpenAI Agents SDK** (MIT) — clean handoff-vs-agent-as-tool distinction, works with 100+ LLMs despite the name | — |
-| TypeScript | **Mastra** (Apache-2.0 core + `ee/` source-available, ~26k★) — Agent + Workflow duality, suspend/resume HITL | Don't treat `ee/` code as a free reference impl — it needs a commercial license in production |
+| TypeScript | **Mastra** (Apache-2.0 core + `ee/` source-available, ~26k★) — Agent + Workflow duality, suspend/resume HITL | Don't treat `ee/` code as a free reference impl — it needs a commercial license in production; Durable Agents are beta and the `@mastra/temporal` runner is "experimental and not ready for production" (mastra.ai docs, read 2026-10-17) |
 | Rust | **rig** (MIT, ~8k★) — only real default in this niche; `rig-core` (portable) / `rig-agent` (orchestration) split | — |
 | Minimal/teaching-grade | **PocketFlow** (MIT, ~11k★, ~100 LOC) — Node+Flow as the one primitive everything else derives from | Don't reach for a 400k-LOC framework when the task is genuinely simple |
 | Enterprise / .NET+Python parity | **Microsoft Agent Framework** (MIT, github.com/microsoft/agent-framework, ~12.4k★ as of 2026-07-25) — successor to both AutoGen and Semantic Kernel; adds durability/checkpointing/HITL/observability/governance as first-class, ships sequential/concurrent/handoff/group-collaboration graph patterns | **AutoGen and Semantic Kernel are legacy** — Microsoft explicitly redirects new builds to Agent Framework (migration guides ship for both); teach the old two as pattern-origins (GroupChat, agents-as-plugins) only |
+
+**One primary loop per request.** LangChain's agents, DeepAgents, Mastra, Vercel `eve`, and the
+OpenAI Agents SDK are each a complete harness; never nest two around the same conversation — two
+loops means two owners of context, retries, and approvals. LangChain's agents already run on
+LangGraph (docs.langchain.com/oss/javascript/langchain/overview), so wrapping one in the other adds
+a loop, not a capability; Pydantic AI refuses a second durable engine on one agent (pydantic.dev
+durable-execution docs, read 2026-10-17). A specialist library behind a bounded tool contract — a document parser, a
+retrieval worker — is fine; it never owns the conversation. Don't start a new build on LlamaIndexTS
+or `workflows-ts`: both repositories are archived and self-declared deprecated (GitHub, read
+2026-10-17).
 
 ## Validation
 - [ ] The control-flow shape is named explicitly (one of §2's workflow patterns, or "autonomous
@@ -212,6 +222,7 @@ Retrieval-first — re-verify star counts/versions before citing (all figures be
 - [ ] If a loop can outlive one request or has non-idempotent side effects: a durability story is
       stated, with the chosen engine's license surfaced.
 - [ ] The framework pick names what-NOT (the alternative not chosen, and why), not just "we use X."
+- [ ] Exactly one primary loop owns each request; any second framework sits behind a bounded tool.
 - [ ] Legacy frameworks (AutoGen, Semantic Kernel) are cited as pattern-origin only, not
       recommended for new builds.
 

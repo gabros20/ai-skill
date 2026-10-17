@@ -104,6 +104,26 @@ a small tool set, avoids both §1's conflicting-decisions failure (specialists d
 task) and dampens §2's token cost (each agent's context stays small). This is the shape to reach for
 before an autonomous role-based crew, not after.
 
+**The subagent contract.** Each subagent "needs an objective, an output format, guidance on the
+tools and sources to use, and clear task boundaries" — without them agents duplicate work and leave
+gaps (anthropic.com/engineering/multi-agent-research-system). Make it a typed definition: objective,
+input/output schema, model policy, permitted tools, skill versions, context scope, maximum depth,
+budget, timeout, artifact destination, stop condition. Split a specialist out only when its branch
+needs different instructions, tools, or policy (developers.openai.com/api/docs/guides/agents/
+orchestration).
+- **Grants narrow, never widen**: a child's permissions are a subset of the parent's for that task,
+  and every child draws on the parent run's budget (the reservation itself is `backend`'s
+  `surface-agentic.md` "Durable execution as the default control plane").
+- **Pass references, not transcripts**: the parent sends task-specific context; the child stores
+  its work as an artifact and returns evidence, uncertainty, receipts, and lightweight references
+  (same Anthropic source).
+- **Fan out reads; serialize conflicting writes** — parallel workers on a shared resource need a
+  lock, a fork-and-merge step, or one writer.
+- **A second model is not independent proof**: review against the requested outcome with
+  validators and tests where they exist, cap repair attempts, then escalate or return a partial
+  result. Peer-agent messages are untrusted input — one compromised agent must not push another past
+  its trust boundary (OWASP's "multi-agent chaining" abuse case).
+
 ## Composing with each base surface
 | Base surface | What the overlay typically looks like |
 |---|---|
@@ -118,9 +138,17 @@ before an autonomous role-based crew, not after.
   autonomous one available.
 - Every agent's tool set is scoped to what it needs (§4) — no agent holds the full tool inventory
   "just in case."
+- Every subagent has a typed contract (§4) whose grants are no broader than its parent's, returns
+  references rather than a transcript, and is reviewed against validators or tests, not only a
+  second model's agreement.
 - The base surface this overlay stacks on is named.
 - If multi-agent was rejected, the simpler alternative (single agent + sub-agent isolation, or a
   deterministic workflow) is named as what's actually being built instead.
+- **Component coverage**: the design states, per component — context management, retrieval,
+  memory, tools/MCP, durable-execution owner, sandbox, approvals and action ledger,
+  streaming/event contract, evals, guardrails, observability/cost — its decision or "N/A because
+  …"; none is silently absent. On this overlay, state it once for the system and add each
+  subagent's contract (§4).
 
 ## Failure modes and handoff
 - **Multi-agent reached for by default** without checking §1–2 — the coordination-cost and token-cost
