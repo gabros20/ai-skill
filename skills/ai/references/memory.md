@@ -34,12 +34,14 @@ Produces:
 - A short-term vs. long-term memory split for the system.
 - A philosophy pick (fact-store / temporal-KG / self-editing-core / ontology-graph) with the
   tradeoff named against the alternatives.
+- A governed record shape plus its write and forget paths (§2b), whichever philosophy is picked.
 - A stance on how memory quality gets measured (LoCoMo/LongMemEval, or a narrower project-specific
   eval).
 
 ## Contents
 - The short-term/long-term split
 - Four philosophies, encoded as options
+- Governed memory (every philosophy)
 - The cognitive taxonomy (and why it's under-canonical)
 - Benchmarks
 - Border: memory vs RAG
@@ -68,11 +70,44 @@ emerged, each a defensible default for a different priority:
 | **Self-editing in-context core + archival** | Letta / MemGPT, active dev at **letta-code** (letta.com/blog/memory-blocks, 2025-05-14) | OS-inspired hierarchy: a small always-in-context "core memory" the model edits via tool calls, backed by paged "archival"/"recall" memory it queries explicitly; memory blocks can be shared across agents | The agent should manage its own memory explicitly (visible, model-editable state) rather than an opaque background pipeline |
 | **Ontology graph, session-vs-permanent split** | cognee (Apache-2.0) | Knowledge-graph + ontology; explicit `remember`/`recall`/`forget`/`improve` verb API; a session cache promotes into a permanent graph | The domain has real structure worth modeling as entities/relations, not just flat facts, and forgetting needs to be a first-class explicit operation |
 
-Default absent a stronger signal: start with the fact-extraction model (mem0) — cheapest to stand
-up on infra most teams already have (a vector store). Move to a temporal KG (Graphiti) only when
+Default absent a stronger signal: **start with explicit, user-editable preference records** —
+small, versioned, scoped rows the user can inspect, edit, and delete (§2b) — and add mem0-style
+inferred memory only once a recall eval on your own conversations (§4) shows it recalls usefully
+without storing wrong or excessive facts. Inferred extraction is the cheapest layer to stand up and
+the widest door for memory poisoning, since it writes from untrusted conversation content (§2b); a
+raw chat log is evidence, not a trusted preference. When inferred memory is earned, fact-extraction (mem0) is the first philosophy to try —
+cheapest on infra most teams already have (a vector store). Move to a temporal KG (Graphiti) only when
 "when did this become true" is a real product requirement; move to self-editing core (Letta) only
 when the agent itself, not a background job, should own memory edits; move to an ontology graph
 (cognee) only when the domain has entity/relation structure worth the modeling cost.
+
+### 2b. Governed memory — applies to all four philosophies
+Whatever stores the facts, the product governs them. OWASP's AI Agent Security Cheat Sheet defines
+**memory poisoning** as "malicious data persisted in agent memory to influence future sessions or
+other users," and its controls are the floor: validate and sanitize before storing, isolate memory
+between users/sessions, set expiry and size limits, audit for sensitive data before persistence
+(cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html, read 2026-10-17).
+- **A memory is a record, not a string**: scope, category, value, source message/document ID,
+  explicit-vs-inferred origin, created, last confirmed, validity interval, sensitivity, status,
+  superseded-by, schema version. A model's confidence score is not an objective probability —
+  store origin and confirmation instead.
+- **A candidate is never automatic authority.** Write path: extract a candidate with its source →
+  classify (preference / episode / task state / sensitive) → apply consent, retention, and scope
+  rules → conflict check (ask, defer, or quarantine) → version and commit. Sandbox scratch notes
+  are never auto-promoted.
+- **Scope comes from the authenticated caller**, never an ID the model supplies; keep user, project,
+  org, and conversation scopes distinct and recall only active, valid records in scope.
+- **A current instruction beats a saved preference** for that task without rewriting the record.
+- **Don't infer sensitive traits because you can** — store them only when the user states them for
+  a purpose, flagged sensitive.
+- **Forget propagates**: revoke and tombstone the record, then invalidate what was derived from it
+  (vectors, summaries, caches, active contexts) and block restoration from old checkpoints. Erasure
+  exceptions are `data`'s `governance-pii-and-retention.md` "GDPR Article 17"; deletion through the
+  index is `data`'s `surface-ai-data-plane.md` "RAG corpus as governed ETL".
+- **Procedural memory is gated**: an agent may *propose* a skill or instruction fix after a failure;
+  only a reviewed version that passes the eval gate is promoted. A run never rewrites its own
+  permissions or publishes its own skill or policy changes.
+- Give the user inspect, correct, forget, and export for every scope they can see.
 
 ### 3. The cognitive taxonomy — teach it, flag its sourcing
 The four philosophies above are commonly mapped onto a **working / episodic / semantic /
@@ -90,7 +125,10 @@ shelf memory products against each other; **not** a substitute for a project-spe
 benchmark performance on synthetic long-conversation datasets doesn't guarantee the memory layer
 recalls *this* product's actual entities correctly. Treat published benchmark numbers the way
 `evaluation.md` treats any benchmark: a directional signal, not gospel — build a narrow eval on the
-system's own recall failures before trusting a vendor's leaderboard number.
+system's own recall failures before trusting a vendor's leaderboard number. Score candidates on your
+own conversations for false-memory rate, contradictions, retrieval precision, extraction cost,
+edit/forget correctness, and latency — a vendor's benchmark claim is supplier evidence, not a
+purchase decision.
 
 ### 5. Product drift — re-verify before naming a package
 Two of the four philosophies changed shape mid-research-cycle; don't cite the old name as current:
@@ -117,7 +155,8 @@ chat assistant with no cross-session recall need — that's short-term context m
 (`prompt-and-context-engineering.md`), not long-term memory. Don't reach for self-editing
 core-memory (Letta) before verifying the added complexity (the model must reliably call
 memory-edit tools correctly) is worth it over a simpler background-consolidation pipeline (mem0).
-The simplest thing that satisfies the actual recall requirement wins by default.
+Don't let an inferred-extraction pipeline write straight into trusted memory. The simplest thing
+that satisfies the actual recall requirement wins by default.
 
 ## Validation
 - The short-term/long-term split is stated explicitly — what's expected to survive only this turn
@@ -130,6 +169,13 @@ The simplest thing that satisfies the actual recall requirement wins by default.
   not cited as settled science.
 - A project-specific recall eval exists (or is explicitly deferred with a reason), not just a
   vendor benchmark number.
+- Memory starts as explicit preference records; inferred memory is added only after that recall
+  eval, or the earlier start is justified.
+- Every record carries scope (from the authenticated caller), source, origin, validity,
+  sensitivity, and status (§2b).
+- A forget test passes: a deleted fact is gone from records, vectors, summaries, caches, and a
+  checkpoint restore; a memory-poisoning case is sanitized, scoped, expired, or rejected before
+  persistence (OWASP's abuse-case matrix).
 
 ## Failure modes and handoff
 - **The real need is within-session context management**, not cross-session persistence — →
