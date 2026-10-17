@@ -115,7 +115,7 @@
     "prompt": "Design a Hungarian-language voice agent for a utility's phone line that looks up accounts and takes meter readings. Pick the architecture and set up turn-taking.",
     "assertions": [
       "Defaults to a streaming cascade for the tool-heavy, audited nodes and names when native speech-to-speech or a hybrid would fit instead",
-      "Defines latency at the caller's ear (first agent audio minus end of user speech) at p50/p95 and refuses to sum stage medians",
+      "Defines latency at the caller's ear (first agent audio minus end of user speech) at p50/p95/p99 and refuses to sum stage medians",
       "Names the turn detector as the binding Hungarian constraint and plans a test set from real 8 kHz call audio (numbers, IDs, short confirmations)",
       "Measures barge-in as false yields vs swallowed interruptions and keeps history to what the caller heard",
       "Puts AI disclosure, opt-out, spell-back of meter readings, and human handoff outside the model, and points the legal rules to success/marketing and the transport to backend",

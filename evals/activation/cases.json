@@ -68,5 +68,10 @@
     "id": "negative-success-support-line-policy",
     "prompt": "Write the policy for our AI phone support line: when callers must be offered a human, what we announce about recording, and how long we keep recordings.",
     "should_trigger": false
+  },
+  {
+    "id": "negative-marketing-outbound-ai-call-consent",
+    "prompt": "What consent do we need before our AI agent cold-calls US and UK numbers?",
+    "should_trigger": false
   }
 ]

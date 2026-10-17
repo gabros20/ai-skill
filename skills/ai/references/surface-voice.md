@@ -17,7 +17,7 @@ Skip when: the work is the audio transport (WebRTC, WebSocket, SIP, media stream
 law, which is `success`'s or `marketing`'s (this overlay builds the mechanics their rules require).
 
 Inputs: the base surface, languages, inbound vs outbound, whether the transcript is the record, tool
-count and argument strictness, a p50/p95 target at the caller's ear, and call minutes per month.
+count and argument strictness, a p50/p95/p99 target at the caller's ear, and call minutes per month.
 
 Produces: a per-node architecture call (§1), a turn-taking design (§2), a component pick and a
 per-minute cost line (§3), a voice eval plan (§5), and the component-coverage line (Validation).
@@ -57,8 +57,8 @@ Budget for STS failure modes before you build:
   Truncate or compress the history, price cached input, or use per-minute billing.
 
 ### 2. Turn-taking: latency budget and interruption
-**Latency is measured at the caller's ear**: end of user speech to first agent audio byte, at p50
-and p95. Never sum stage medians; the stages overlap, so the segments "don't add up to the p50 or
+**Latency is measured at the caller's ear**: end of user speech to first agent audio byte, at
+p50/p95/p99. Never sum stage medians; the stages overlap, so the segments "don't add up to the p50 or
 p95" (LiveKit observability docs). The budget is endpointing + STT
 finalization + LLM first token + TTS first byte + network, and **endpointing and LLM first token
 dominate**. Every millisecond on a silence timer adds directly to response time. Lab targets are
@@ -123,12 +123,12 @@ list prices.
 | [observability-and-cost](observability-and-cost.md) | Turn spans cover STT, LLM, and TTS. Keep framework attributes: LiveKit's turn metrics use its own `lk.agents.*` names, so a `gen_ai.*`-only filter drops them. LLM spans can carry serialized input/output (Pipecat OTel docs), so the trace store is a PII store, and redacting the transcript leaves the audio untouched. Cost per call comes from the spans' LLM token and TTS character counts (§3's formula). Retention and redaction per store are `operate`'s (`observability.md` "AI-system observability — same discipline, one new signal"). |
 
 ### 5. Voice evals at the caller's ear
-- **Latency** at the ear, p50/p95, over enough turns that outliers do not set the p95.
+- **Latency** at the ear, p50/p95/p99, over enough turns that outliers do not set the tail.
 - **Turn-taking** as the false-yield and swallowed-interruption pair, from labeled calls.
 - **Recognition** as WER on your own call audio, counting the errors that change the agent's action.
 - **Task completion** against verifiable state, in noise and with accents. τ-Voice
   (proceedings.mlr.press/v306/ray26a.html) found voice agents at 31–51% on clean audio and 26–38%
-  in realistic noise and accents, against 85% in text: 30–45% of text capability, with 79–90% of
+  in realistic noise and accents (30–45% of the text score), against 85% in text, with 79–90% of
   failures from agent behavior. A text pass does not predict a voice pass, and error analysis
   ([evaluation](evaluation.md) §1) still comes first.
 - **Layer by cost** (LiveKit testing docs): text-mode tests for tools and handoffs in CI, simulated
@@ -140,7 +140,8 @@ list prices.
 
 ### 6. Guardrails on a call
 - **Disclose AI at the first interaction** with a pre-rendered or cached greeting, never one
-  generated after answer; never claim to be human. The legal rules belong to `success`
+  generated after answer (where `marketing`'s rule requires a live announcement first, it precedes
+  the agent); never claim to be human. The legal rules belong to `success`
   (`ai-support-policy.md` "AI voice support lines: disclose first, keep a person reachable") for
   support lines and to `marketing` (`lifecycle-and-email.md` "Outbound AI-voice calls are
   automated calls") for outbound consent.
@@ -173,7 +174,7 @@ per-turn evals, observability) are lock-in too; name them in the decision record
 ## Validation
 - Base surface named; each node's architecture has a reason; on STS, reconnect, truncation, and
   transcript tap are built or N/A.
-- Latency at the ear (p50/p95), barge-in as the error pair, dated list prices, language per mode,
+- Latency at the ear (p50/p95/p99), barge-in as the error pair, dated list prices, language per mode,
   and audio evals in noise with a calibrated judge.
 - **Component coverage**: every component in the base surface's coverage line, plus voice
   transport owner, turn detection, speech-to-text, text-to-speech, and telephony, has a decision
