@@ -2,12 +2,12 @@
 name: ai
 description: >-
   Build model-powered behavior — model routing, context engineering, structured outputs, tools/MCP,
-  agents, RAG, memory, evals, guardrails, and cost/observability — across chat, voice, agent, RAG,
-  batch, and multi-agent systems, any provider/language. Use to route a model, engineer context, build
-  an agent or tool loop, add RAG, web search, or memory, write evals or guardrails. Not for system/threat
-  design (→ architecture), serving or MCP hosting (→ backend), data pipelines (→ data), chat UI
-  (→ frontend), independent QA (→ quality), deploy (→ operate), or deterministic workflows
-  (→ automation).
+  agents, RAG, memory, evals, guardrails, cost/observability — across chat, voice, agent, RAG,
+  batch, multi-agent systems, any provider/language. Use to route a model, engineer context, build
+  an agent/tool loop, add RAG, web search, or memory, write evals/guardrails. Not for system/threat
+  design (→ architecture), serving, MCP hosting, voice transport (→ backend), data pipelines
+  (→ data), chat UI (→ frontend), independent QA (→ quality), deploy (→ operate), or deterministic
+  workflows (→ automation).
 ---
 
 # AI Systems

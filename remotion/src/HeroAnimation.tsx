@@ -13,7 +13,7 @@ import { themes, MONO, SANS, type ThemeName, type Theme } from "./theme";
 // skill — a request arrives (the whole model-powered register), the retrieval-first / anti-staleness
 // gate re-verifies the model/price/version against the live source before quoting a memorized number,
 // the faceted router composes the smallest sufficient reference set from one primary job × at most one
-// base surface + the ADDITIVE multi-agent overlay, the EVALUATION flagship shows evals as the
+// base surface + the ADDITIVE overlays (multi-agent, voice), the EVALUATION flagship shows evals as the
 // completion gate (error-analysis-first dataset, aligned judge, pass^k — run, not asserted), a full
 // pass produces a running behavior + eval suite and verifies-and-subtracts, and a handoff.yaml carrying
 // volatile_facts hands the BEHAVIOR off downstream. ~57s, loops (opens/closes empty).
@@ -26,7 +26,7 @@ import { themes, MONO, SANS, type ThemeName, type Theme } from "./theme";
 // Scene map (30fps):
 //   S1 request    0–210       the ask arrives — the whole ai register
 //   S2 verify     210–500     retrieval-first / anti-staleness — re-verify against the live source
-//   S3 route      500–840     THE centerpiece: one job × one base surface + additive multi-agent
+//   S3 route      500–840     THE centerpiece: one job × one base surface + additive overlays
 //   S4 evaluate   840–1190    the flagship: evals as the completion gate — aligned judge, pass^k
 //   S5 produce    1190–1480   what a pass produces + verify-and-subtract
 //   S6 handoff    1480–1720   hand the BEHAVIOR + volatile_facts off to quality · operate · …
@@ -167,7 +167,7 @@ const SceneRoute: React.FC<{ t: Theme; dur: number }> = ({ t, dur }) => {
         <div style={{ display: "flex", flexDirection: "column", gap: 15, width: "100%", maxWidth: 1000 }}>
           <Lane t={t} label="one primary job" chips={["routing", "context", "structured", "tools/MCP", "agent", "RAG", "memory", "evaluation", "guardrails", "cost"]} onIndex={7} appear={lane1} lit={lit1} litColor={t.accent} star />
           <Lane t={t} label="≤ one base surface" chips={["chat-assistant", "autonomous-agent", "rag-app", "batch-pipeline"]} onIndex={2} appear={lane2} lit={lit2} litColor={t.accent} />
-          <Lane t={t} label="+ multi-agent (additive)" chips={["surface-multi-agent"]} onIndex={0} appear={lane3} lit={lit3} litColor={t.multi} />
+          <Lane t={t} label="+ additive overlays" chips={["surface-multi-agent", "surface-voice"]} onIndex={0} appear={lane3} lit={lit3} litColor={t.multi} />
         </div>
         <div style={{ fontFamily: MONO, fontSize: 26, color: t.accent, margin: "15px 0 12px", opacity: arrow }}>↓</div>
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 9, maxWidth: 980 }}>
@@ -182,7 +182,7 @@ const SceneRoute: React.FC<{ t: Theme; dur: number }> = ({ t, dur }) => {
           })}
         </div>
         <div style={{ marginTop: 18, fontFamily: MONO, fontSize: 16.5, color: t.muted, opacity: counter }}>
-          <span style={{ color: t.ink, fontWeight: 600 }}>one job · one base · + multi-agent</span> — read fully, <span style={{ color: t.accent }}>never all 16</span>
+          <span style={{ color: t.ink, fontWeight: 600 }}>one job · one base · + multi-agent</span> — read fully, <span style={{ color: t.accent }}>never all 17</span>
         </div>
       </div>
     </AbsoluteFill>

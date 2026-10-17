@@ -7,8 +7,12 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
-### Added
-- Queue unreleased changes here.
+### Fixed
+- Description: voice transport (WebRTC/SIP/telephony streams) now routes to `backend` alongside
+  serving and MCP hosting, so a media-server request does not trigger `ai` on the word "voice";
+  trimmed to hold the 600-character target.
+- Site hero re-rendered (light and dark mp4 plus posters): the router scene shows 17 references
+  and lists both additive overlays, `surface-multi-agent` and `surface-voice`.
 
 ## [0.4.0] — 2026-10-17
 
