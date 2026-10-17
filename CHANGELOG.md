@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.3.0] — 2026-10-17
+
+### Added
 - **Governed memory** (`memory` §2b), for all four philosophies: the memory record's fields, a
   candidate-is-never-authority write path, scope from the authenticated caller, instruction-beats-
   preference, no inferred sensitive traits, forget propagation to derived vectors/summaries/caches/
@@ -90,5 +95,6 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   language-agnostic; consumes architecture's contracts/threat-model and hands running behavior +
   eval suites + telemetry to `quality`/`operate`.
 
+[0.3.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.3.0
 [0.2.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.2.0
 [0.1.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.1.0
