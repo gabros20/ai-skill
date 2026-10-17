@@ -66,8 +66,9 @@ downstream_requirements:            # mirrors references/handoff.md "What `ai` h
                                     # controls; operate: provider, capacity, teardown, template digest
   approval_and_reconnect: ""        # frontend: approval-card action preview, resume after
                                     # disconnect, closing the client never cancels
-  scoped_retrieval_and_deletion: "" # data: per-caller sources and memory scopes; what a forget or
-                                    # revoke must invalidate
+  scoped_retrieval_and_deletion: "" # data: per-caller sources; source-ACL capture and the
+                                    # delete/revoke path through the corpus and its index
+                                    # (memory-record forget stays ai's, memory.md §2b)
 
 threat_model_border:
   controls_implemented_by_ai: []        # guardrails/approval-gates ai implemented here

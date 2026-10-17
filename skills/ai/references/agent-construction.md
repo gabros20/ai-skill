@@ -207,10 +207,10 @@ OpenAI Agents SDK are each a complete harness; never nest two around the same co
 loops means two owners of context, retries, and approvals. LangChain's agents already run on
 LangGraph (docs.langchain.com/oss/javascript/langchain/overview), so wrapping one in the other adds
 a loop, not a capability; Pydantic AI refuses a second durable engine on one agent (pydantic.dev
-durable-execution docs, read 2026-10-17). A specialist library behind a bounded tool contract — a document parser, a
-retrieval worker — is fine; it never owns the conversation. Don't start a new build on LlamaIndexTS
-or `workflows-ts`: both repositories are archived and self-declared deprecated (GitHub, read
-2026-10-17).
+durable-execution docs, read 2026-10-17). A specialist library behind a bounded tool contract — a
+document parser, a retrieval worker — is fine; it never owns the conversation. Don't start a new
+build on LlamaIndexTS or `workflows-ts`: both repositories are archived and self-declared deprecated
+(GitHub, read 2026-10-17).
 
 ## Validation
 - [ ] The control-flow shape is named explicitly (one of §2's workflow patterns, or "autonomous

@@ -118,8 +118,9 @@ only when its branch needs different instructions, tools, or policy (OpenAI orch
 - **Fan out reads; serialize conflicting writes** — parallel workers on a shared resource need a
   lock, a fork-and-merge step, or one writer.
 - **A second model is not independent proof**: review with validators and tests where they exist,
-  cap repair attempts, then escalate or return a partial result. Peer-agent messages are untrusted input — one compromised agent must not push another past
-  its trust boundary (OWASP's "multi-agent chaining" abuse case).
+  cap repair attempts, then escalate or return a partial result. Peer-agent messages are untrusted
+  input — one compromised agent must not push another past its trust boundary (OWASP's "multi-agent
+  chaining" abuse case).
 
 ## Composing with each base surface
 | Base surface | What the overlay typically looks like |

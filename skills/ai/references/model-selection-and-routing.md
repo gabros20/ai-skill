@@ -198,12 +198,12 @@ Classify errors before deciding retry policy:
 | Content-filter block | No (same input) | Route to a different provider/tier, or degrade UX |
 
 Fallback **order is policy**: prefer same-tier-different-provider before same-provider-degraded-
-tier — a degraded-tier answer that looks identical to the user is worse than an equal-quality
-answer from a second provider. Wrap multi-provider calls behind one interface so the caller
-doesn't branch on vendor. Fallbacks stay inside the eligibility filters: record the resolved route
-per run and fail closed when no allowed route remains. For
-sustained failure, a circuit breaker (closed → open → half-open) stops hammering a down provider; hedged requests (fire a second call after a timeout, take
-whichever returns first) trade cost for tail latency on latency-critical paths.
+tier — a degraded-tier answer that looks identical to the user is worse than an equal-quality answer
+from a second provider. Wrap multi-provider calls behind one interface so the caller doesn't branch
+on vendor. Fallbacks stay inside the eligibility filters: record the resolved route per run and fail
+closed when no allowed route remains. For sustained failure, a circuit breaker (closed → open →
+half-open) stops hammering a down provider; hedged requests (fire a second call after a timeout,
+take whichever returns first) trade cost for tail latency on latency-critical paths.
 
 **The distinctive discipline**: when a fallback degrades quality, say so — never silently, never
 as a hard error. Name what the user sees per degradation type (shorter answer, no citations,

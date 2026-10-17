@@ -70,15 +70,15 @@ emerged, each a defensible default for a different priority:
 | **Self-editing in-context core + archival** | Letta / MemGPT, active dev at **letta-code** (letta.com/blog/memory-blocks, 2025-05-14) | OS-inspired hierarchy: a small always-in-context "core memory" the model edits via tool calls, backed by paged "archival"/"recall" memory it queries explicitly; memory blocks can be shared across agents | The agent should manage its own memory explicitly (visible, model-editable state) rather than an opaque background pipeline |
 | **Ontology graph, session-vs-permanent split** | cognee (Apache-2.0) | Knowledge-graph + ontology; explicit `remember`/`recall`/`forget`/`improve` verb API; a session cache promotes into a permanent graph | The domain has real structure worth modeling as entities/relations, not just flat facts, and forgetting needs to be a first-class explicit operation |
 
-Default absent a stronger signal: **start with explicit, user-editable preference records** —
-small, versioned, scoped rows the user can inspect, edit, and delete (§2b) — and add mem0-style
-inferred memory only once a recall eval on your own conversations (§4) shows it recalls usefully
-without storing wrong or excessive facts. Inferred extraction is the widest door for memory
-poisoning, since it writes from untrusted conversation content (§2b); a raw chat log is evidence,
-not a trusted preference. When inferred memory is earned, fact-extraction (mem0) is the first
-philosophy to try — cheapest on infra most teams already have (a vector store). Move to a temporal KG (Graphiti) only when
-"when did this become true" is a real product requirement; move to self-editing core (Letta) only
-when the agent itself, not a background job, should own memory edits; move to an ontology graph
+Default absent a stronger signal: **start with explicit, user-editable preference records** — small,
+versioned, scoped rows the user can inspect, edit, and delete (§2b) — and add mem0-style inferred
+memory only once a recall eval on your own conversations (§4) shows it recalls usefully without
+storing wrong or excessive facts. Inferred extraction is the widest door for memory poisoning, since
+it writes from untrusted conversation content (§2b); a raw chat log is evidence, not a trusted
+preference. When inferred memory is earned, fact-extraction (mem0) is the first philosophy to try —
+cheapest on infra most teams already have (a vector store). Move to a temporal KG (Graphiti) only
+when "when did this become true" is a real product requirement; move to self-editing core (Letta)
+only when the agent itself, not a background job, should own memory edits; move to an ontology graph
 (cognee) only when the domain has entity/relation structure worth the modeling cost.
 
 ### 2b. Governed memory — applies to all four philosophies

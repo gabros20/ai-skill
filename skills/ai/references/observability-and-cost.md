@@ -71,14 +71,14 @@ skills-corpus):
 `llm.response.cost.usd_estimate`); expect to discover the exact field name per instrumentation
 rather than assume a standard one (skills-corpus, elastic donor).
 
-**Telemetry content policy — record references, not content.** Instrumentations "SHOULD NOT
-capture" instructions, inputs, and outputs by default and should offer an opt-in; in production,
-store content externally and record references on the span, under separate access controls (open-telemetry/semantic-conventions-genai,
-`gen-ai-spans.md` "Capturing instructions, inputs, and outputs", read 2026-10-17). Default: no raw
-prompts, user files, screenshots, or tool payloads in traces; restricted content in its own store
-with its own retention; secrets redacted before emission. Record versions instead — prompt, tool,
-skill, router policy, resolved model — plus retrieval source IDs, approval wait, and final task
-status.
+**Telemetry content policy — record references, not content.** Instrumentations "SHOULD NOT capture"
+instructions, inputs, and outputs by default and should offer an opt-in; in production, store
+content externally and record references on the span, under separate access controls
+(open-telemetry/semantic-conventions-genai, `gen-ai-spans.md` "Capturing instructions, inputs, and
+outputs", read 2026-10-17). Default: no raw prompts, user files, screenshots, or tool payloads in
+traces; restricted content in its own store with its own retention; secrets redacted before
+emission. Record versions instead — prompt, tool, skill, router policy, resolved model — plus
+retrieval source IDs, approval wait, and final task status.
 
 ### 2. Trace/span vocabulary
 Standardize on **trace = one request lifecycle; span/observation = one nested operation** (an LLM
