@@ -79,8 +79,8 @@ best-case: one vendor's production aggregate, with its sampling method unstated,
   on every turn (daily.co/blog/benchmarking-stt-for-voice-agents, read 2026-10-17). Check this
   before tuning VAD.
 - **History holds only what the caller heard.** On barge-in, truncate the unplayed reply. The
-  playback primitives belong to `backend` (`surface-realtime.md` "Pick the transport: SSE vs
-  WebSocket"). Measure barge-in as **two opposing error rates**. A *false yield* is stopping for a
+  playback primitives belong to `backend` (`surface-realtime.md`
+  "Voice media transport — the substrate under a voice agent"). Measure barge-in as **two opposing error rates**. A *false yield* is stopping for a
   backchannel or noise. A *swallowed interruption* is talking over a real barge-in. In one
   production baseline, 89% of rule-based barge-ins were false, caused by no intent to interrupt,
   noise, echo, or misplaced turns (arxiv.org/pdf/2205.15060). Fix echo cancellation first, then
@@ -184,7 +184,8 @@ per-turn evals, observability) in the decision record as lock-in too.
   finalization and echo first, then label by cause (§2).
 - **"90+ languages" trusted.** Coverage is per model and per mode, and that includes the turn
   detector (§3).
-- **Handoffs.** Transport, codecs, and reconnect plumbing go to `backend` (`surface-realtime.md`).
+- **Handoffs.** Transport, codecs, and reconnect plumbing go to `backend` (`surface-realtime.md`
+  "Voice media transport — the substrate under a voice agent").
   Per-minute cost, concurrency, the latency SLI, and recording retention go to `operate`
   (`surface-ai-system.md` "Time-to-first-token is a distinct SLI from total duration").
   Build-vs-buy of a voice platform goes to `architecture` (`surface-agentic.md` "Runtime
