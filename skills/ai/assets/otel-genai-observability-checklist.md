@@ -23,9 +23,11 @@ elastic/agent-skills `observability-llm-obs` (Apache-2.0), paraphrased. Backgrou
 | 14 | Per-org/feature spend cap | A `max_total_tokens`-style cap or $/month ceiling configured, not unlimited spend | | |
 | 15 | Online-eval wiring | The offline judge (from `evaluation.md`) also runs against live traffic as a monitor | | |
 | 16 | Platform license cleared | If self-hosting/reselling the observability platform, its license (open-core/ELv2/etc.) is checked against the primary LICENSE file | | |
+| 17 | Content capture off by default | No raw prompts, files, screenshots, or tool payloads on spans unless explicitly opted in; captured content goes to a restricted store and the span records a reference | | |
+| 18 | Audit records outside traces | Usage, billing, and audit entries live in their own durable store; trace sampling never drops one | | |
 
-**Self-audit count: ____ / 16 controls implemented and evidenced.**
+**Self-audit count: ____ / 18 controls implemented and evidenced.**
 
-Anything below 16/16 must be either fixed before ship or explicitly waived with a stated reason
+Anything below 18/18 must be either fixed before ship or explicitly waived with a stated reason
 and owner — do not ship a silent gap, especially rows 5–6 (cache/cost splitting) and 13
 (cache-hit-rate visibility), which are this cluster's most commonly-skipped controls.
