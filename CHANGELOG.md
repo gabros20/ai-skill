@@ -8,7 +8,36 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- **Governed memory** (`memory` §2b), for all four philosophies: the memory record's fields, a
+  candidate-is-never-authority write path, scope from the authenticated caller, instruction-beats-
+  preference, no inferred sensitive traits, forget propagation to derived vectors/summaries/caches/
+  checkpoints, gated procedural memory; grounded in OWASP's memory-poisoning guidance.
+- **Routing is seven decisions** (`model-selection-and-routing` §2): workflow, model/effort, tool
+  discovery, skill, retrieval, delegation, review/repair, each with its failure to measure; hard
+  eligibility filters before any learned router (narrow, never grant); decision-model adapters for
+  routing only, calibrated per category; resolved route recorded per run, fail closed.
+- **Media meters** (`model-selection-and-routing` §2): keep the billing unit (image / megapixel /
+  second), regular rate not promo, $ per accepted asset, copy outputs before provider retention.
+- **Router rollout** (`evaluation` §9): baseline → shadow → label → canary → promote on cost per
+  successful task, with a versioned policy and rollback.
+- **One primary loop per request** (`agent-construction` §8) plus dated status notes (DeepAgents
+  local shell has no isolation; Mastra Durable Agents beta, Temporal runner experimental;
+  LlamaIndexTS and workflows-ts archived).
+- **Subagent contract** (`surface-multi-agent` §4): typed definition, grants narrow never widen,
+  references not transcripts, serialize conflicting writes, a second model is not proof.
+- **Capability registry and grant-filtered discovery** (`tool-and-mcp-integration` §1).
+- **Telemetry content policy** and meter-unit traps (`observability-and-cost` §1, §4); OTel
+  checklist grows to 18 controls.
+- OWASP abuse-case matrix as repeatable agent red-team cases (`guardrails-and-safety` §4).
+- **Completeness**: four downstream requirement rows in `handoff` (external-action safety, isolated
+  execution, approval and reconnect, scoped retrieval and deletion) mirrored as
+  `downstream_requirements` in `assets/handoff.yaml`; a component-coverage line ("decision or
+  N/A because …") in the Validation of all four base surfaces and the multi-agent overlay.
+
+### Changed
+- **Memory starting default** (`memory` §2): explicit, user-editable preference records first;
+  mem0-style inferred memory only once a recall eval shows it helps without storing wrong or
+  excessive facts (was: start with mem0 fact extraction).
 
 ## [0.2.0] — 2026-10-17
 

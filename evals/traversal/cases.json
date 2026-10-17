@@ -66,6 +66,12 @@
     "forbidden_references": ["references/guardrails-and-safety.md"]
   },
   {
+    "id": "memory-governed-preferences",
+    "prompt": "Our assistant should remember each user's preferences across sessions, and users must be able to correct or delete what it remembers.",
+    "expected_references": ["references/memory.md"],
+    "forbidden_references": ["references/surface-multi-agent.md"]
+  },
+  {
     "id": "decline-to-architecture",
     "prompt": "Design the threat model and system boundaries for our agent platform.",
     "expected_references": [],

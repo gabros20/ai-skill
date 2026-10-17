@@ -17,10 +17,12 @@ before relying on any of them (this layer churns monthly).**
 - Pydantic AI — https://github.com/pydantic/pydantic-ai (MIT) · Mastra — https://github.com/mastra-ai/mastra (Apache-2.0 core + `ee/` source-available)
 - smolagents (CodeAgent) — https://github.com/huggingface/smolagents (Apache-2.0) · rig (Rust) — https://github.com/0xPlaygrounds/rig (MIT)
 - Microsoft Agent Framework (successor to AutoGen + Semantic Kernel) — https://github.com/microsoft/agent-framework (MIT)
+- Read 2026-10-17: Anthropic, multi-agent research system (subagent task contract, artifact references) · OpenAI orchestration and handoffs — https://developers.openai.com/api/docs/guides/agents/orchestration · LangChain overview (agents built on LangGraph) — https://docs.langchain.com/oss/javascript/langchain/overview · Pydantic AI durable execution (one engine per agent) — https://pydantic.dev/docs/ai/capabilities/durable_execution/overview/ · Deep Agents backends — https://docs.langchain.com/oss/python/deepagents/backends · Mastra Durable Agents (beta) — https://mastra.ai/docs/harness/durable-agents · Mastra workflow runners (Temporal experimental) — https://mastra.ai/docs/deployment/workflow-runners · LlamaIndexTS and workflows-ts (archived, deprecated) — https://github.com/run-llama/LlamaIndexTS · https://github.com/run-llama/workflows-ts
 
 ## Tools & MCP
 - Model Context Protocol spec — https://modelcontextprotocol.io/specification (stable 2025-11-25; 2026-07-28 RC pending — re-verify)
 - MCP Python/TypeScript SDKs (MIT, v1 for prod) · FastMCP (PrefectHQ, Apache-2.0) — https://github.com/PrefectHQ/fastmcp · MCP registry
+- Read 2026-10-17: Anthropic, advanced tool use (Tool Search Tool, `defer_loading`) — https://www.anthropic.com/engineering/advanced-tool-use · Cursor, dynamic context discovery — https://cursor.com/blog/dynamic-context-discovery
 
 ## Computer use (read 2026-10-17)
 - OpenAI computer-use guide — https://developers.openai.com/api/docs/guides/tools-computer-use
@@ -37,6 +39,7 @@ before relying on any of them (this layer churns monthly).**
 ## Memory
 - Letta / MemGPT — https://www.letta.com/blog/memory-blocks/ (Apache-2.0; active dev → letta-code)
 - mem0 — https://github.com/mem0ai/mem0 (Apache-2.0) · Zep/Graphiti temporal KG — https://arxiv.org/abs/2501.13956 (OSS engine = getzep/graphiti) · cognee (Apache-2.0)
+- OWASP AI Agent Security Cheat Sheet (memory poisoning, abuse-case matrix; CC BY-SA 4.0, read 2026-10-17) — https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
 
 ## Evaluation (flagship) & guardrails
 - Hamel Husain — "Your AI Product Needs Evals" / "LLM-as-a-Judge" / Evals FAQ (w/ Shreya Shankar) — https://hamel.dev/blog/posts/evals-faq/
@@ -57,9 +60,12 @@ before relying on any of them (this layer churns monthly).**
 - Self-host sizing: Hugging Face MoE explainer — https://huggingface.co/blog/moe · NVIDIA inference optimization — https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/ · vLLM parallelism — https://docs.vllm.ai/en/latest/serving/parallelism_scaling.html · vLLM prefix-cache salting — https://docs.vllm.ai/en/latest/design/prefix_caching.html
 - Vercel AI SDK — https://ai-sdk.dev (v7, `ai@7.0.37` npm-verified 2026-07-25; re-verify) · vLLM (Apache-2.0) · Ollama (MIT) · llama.cpp (MIT)
 - Gateways/routing: litellm (open-core) · Portkey (MIT). Durable execution: Temporal (MIT) · Inngest (SSPL) · Restate (BSL 1.1)
+- Routing, read 2026-10-17: Cursor, how Cursor Router works (2026-08-06) — https://prod.cursor.com/blog/how-cursor-router-works · OpenAI Decisions API (public beta) — https://developers.openai.com/api/docs/guides/decisions · Vercel AI Gateway Decision (beta) — https://vercel.com/docs/ai-gateway/modalities/decision · RouteLLM — https://github.com/lm-sys/RouteLLM
+- Media meters, read 2026-10-17 (re-verify): Replicate pricing — https://replicate.com/pricing · fal FLUX 1.1 Pro endpoint — https://fal.ai/models/fal-ai/flux-pro/v1.1 · Replicate data retention — https://replicate.com/docs/topics/predictions/data-retention
 
 ## Observability
 - OpenTelemetry GenAI semantic conventions (`gen_ai.*`) · OpenLLMetry (Apache-2.0, semconv upstreamed) · Langfuse (open-core) · Helicone (Apache-2.0)
+- OTel GenAI spans, "Capturing instructions, inputs, and outputs" (content off by default; read 2026-10-17) — https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-spans.md · Meter units (read 2026-10-17, re-verify): Inngest pricing — https://www.inngest.com/pricing · Vercel Connect pricing — https://vercel.com/docs/connect/pricing · OpenRouter pricing — https://openrouter.ai/pricing
 
 ## Donor skills (patterns/shape, not verbatim)
 - wshobson/agents `prompt-engineering-patterns` / `llm-evaluation` (MIT) · addyosmani/agent-skills `context-engineering` (MIT)

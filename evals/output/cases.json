@@ -87,5 +87,27 @@
       "Suggests a cascade/escalation to the stronger model for tasks the first fails, rather than a flat switch",
       "Any model name or price is date-stamped with a re-verify instruction"
     ]
+  },
+  {
+    "id": "memory-governed-default",
+    "prompt": "Add long-term memory to our multi-tenant support agent so it remembers customer preferences. Should we just plug in mem0?",
+    "assertions": [
+      "Starts with explicit, user-editable preference records and adds inferred (mem0-style) memory only after a recall eval on the product's own conversations",
+      "Treats an extracted fact as a candidate, not authority: source, classification, consent/scope, and conflict check before commit",
+      "Resolves memory scope from the authenticated tenant/user, never from an ID the model supplies",
+      "Makes forget propagate to derived vectors, summaries, caches, and checkpoint restore, and points the erasure policy to data",
+      "Names memory poisoning as a test case (sanitized, scoped, expired, or rejected before persistence)"
+    ]
+  },
+  {
+    "id": "router-rollout-and-eligibility",
+    "prompt": "We want a small classifier to route requests between a cheap and a strong model and pick which tools the agent sees. How do we roll it out safely?",
+    "assertions": [
+      "Applies hard eligibility filters (grants, region, data policy, budget) before the router, and states the router narrows but never grants access",
+      "Keeps tool arguments out of the classifier — function calling or structured output generates them",
+      "Rolls out baseline → shadow → labelled corrections → canary → promote on cost per successful task, p95, and corrections, with a versioned policy and rollback",
+      "Counts router inference, extra retries, and cache misses from model switching in the promotion math",
+      "Any vendor endpoint or model name is date-stamped with a re-verify instruction"
+    ]
   }
 ]
