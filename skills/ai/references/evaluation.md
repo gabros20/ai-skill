@@ -42,6 +42,7 @@ named shape, and an explicit offline/online/regression/safety suite assignment.
 - pass@k vs pass^k
 - RAG-metric vocabulary
 - Distrust benchmarks
+- Rolling out a router
 
 ## Procedure
 
@@ -173,6 +174,27 @@ suites are **filters**; the decision is a private set scored per (model, harness
 cost-per-success procedure lives in `model-selection-and-routing.md` §1b. And a frozen small set
 over-optimized against becomes fake too: rotate a few tasks each cycle.
 
+### 9. Rolling out a router
+A learned router or cheaper route is a behavior change; it ships like one. Cursor learns routing
+from what the user does next — moving on is a strong positive signal, correcting the agent a strong
+negative — and screens candidate policies offline before testing them on live traffic
+(prod.cursor.com/blog/how-cursor-router-works, 2026-08-06). A startup without that traffic gets the
+method, not the savings:
+1. **Baseline**: one capable-model configuration on representative end-to-end tasks.
+2. **Shadow**: run the router beside it and log the route it *would* have chosen; execution
+   unchanged.
+3. **Label**: wrong routes, failed tasks, user corrections, tool mistakes, total spend. Silence is
+   not success.
+4. **Canary** the cheaper route on well-defined task families; unknown and sensitive cases stay on
+   the baseline.
+5. **Promote** only on cost per successful task (`model-selection-and-routing.md` §1b), p95
+   latency, correction rate, and action failures — counting the router's own inference and the
+   extra retries it causes. Version the policy; keep an immediate rollback.
+
+Promote when expected savings exceed router cost plus added retry, review, latency, and support
+cost while quality and authorization constraints still hold. Grade action tasks on final state and
+receipts, not the transcript.
+
 ## Validation
 - A failure taxonomy exists, built from real traces via open→axial coding, not assumed upfront.
 - Judge alignment is reported as precision/recall against a human-labeled holdout, not raw
@@ -183,6 +205,8 @@ over-optimized against becomes fake too: rotate a few tasks each cycle.
 - Reliability claims cite pass^k, not pass@k, where retries aren't available to the user.
 - No ship decision rests solely on a public benchmark score; any cited score names its variant,
   harness, and source (independent vs vendor).
+- A router or cheaper route reached production through shadow → canary on cost per successful
+  task, with a versioned policy and a rollback (§9).
 
 ## Failure modes and handoff
 - **No real traces exist yet** — don't start with judge-building; instrument the system and collect

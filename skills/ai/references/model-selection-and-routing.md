@@ -137,10 +137,42 @@ Bound escalation: cap depth at one hop (cheap → flagship, not a ladder), and l
 failure modes in practitioner routing guidance (skills-corpus, jpoindexter donor, paraphrased —
 no verbatim lift, source has no declared license).
 
+**Routing is seven decisions, not one** — a gateway picks provider and quota, not the workflow,
+skill, or safe action. Route each separately and measure its own failure:
+
+| Decision | Start with | Failure to measure | Owned in |
+|---|---|---|---|
+| Workflow | Explicit intent categories | A write request routed into a generic chat path | `agent-construction.md` §2 |
+| Model and effort | Tier aliases (fast / reasoning / judge) | A cheap attempt that costs a repair or drops a constraint | §1b–4 here |
+| Tool discovery | Grant filter, then a small registry | Similar tools confused; an unavailable connector offered | `tool-and-mcp-integration.md` §1 |
+| Skill | Metadata shortlist, then load the pick | Wrong or conflicting instructions, over-loading | `prompt-and-context-engineering.md` §4 |
+| Retrieval | Exact SQL/API for state, hybrid search for documents | Semantic search inventing a precise state answer | `retrieval-and-rag.md` §4 |
+| Delegation | One agent; explicit independent subtasks | Coordination cost exceeding the gain | `surface-multi-agent.md` |
+| Review and repair | Deterministic validators, then selective model review | A reviewer agreeing with the mistake, or looping | `evaluation.md` §3 |
+
+**Hard eligibility filters run before any learned router** — tenant grants, region, data policy,
+modality, budget. A router narrows the eligible set; it never grants what the caller lacks, and a
+confident classification is not authorization. Decision-model endpoints (typed predicate/choice/
+rubric answers; OpenAI Decisions and Vercel AI Gateway Decision were both beta when read 2026-10-17
+— re-verify) fit intent, tier, and skill routing, not tool arguments, which stay with function
+calling or structured output (developers.openai.com/api/docs/guides/decisions). Wrap them in a
+swappable adapter with a deterministic fallback; calibrate thresholds on your own traffic
+(github.com/lm-sys/RouteLLM README), per category, including ambiguous and out-of-distribution
+inputs. Switching models can miss the prompt cache — count it (Cursor, prod.cursor.com/blog/
+how-cursor-router-works, 2026-08-06). Rollout: `evaluation.md` §9.
+
 **Image/video generation routes the same way, on a different meter:**
 - Tier by how hard the output will be scrutinized (hero/brand asset → frontier tier; filler and
-  drafts → cheap tier); price per image or per second from the first-party page (aggregator and
-  reseller rates drift).
+  drafts → cheap tier); read the price from the first-party page (aggregator and reseller rates
+  drift).
+- **Keep the billing unit** (per image, megapixel, or second) and compare at your exact settings:
+  one model billed per output image on Replicate, per megapixel rounded up on fal (endpoint pages,
+  read 2026-10-17). Price the ongoing case at the regular rate, never a promo.
+- Report **$ per accepted asset**: total spend ÷ assets kept, rejected drafts and billed failures
+  included.
+- **Copy outputs into storage you own** before provider retention expires — Replicate deletes API
+  prediction data after an hour by default (replicate.com/docs/topics/predictions/data-retention,
+  read 2026-10-17); the durable job is `backend`'s `async-and-messaging.md` "Durable execution".
 - Keep video opt-in per run — per-second billing makes one clip cost more than many stills — and
   give the run a spend ceiling.
 - Drive a deterministic generation with a direct API call, not an agentic CLI (latency and
@@ -168,8 +200,9 @@ Classify errors before deciding retry policy:
 Fallback **order is policy**: prefer same-tier-different-provider before same-provider-degraded-
 tier — a degraded-tier answer that looks identical to the user is worse than an equal-quality
 answer from a second provider. Wrap multi-provider calls behind one interface so the caller
-doesn't branch on vendor. For sustained failure, a circuit breaker (closed → open → half-open)
-stops hammering a down provider; hedged requests (fire a second call after a timeout, take
+doesn't branch on vendor. Fallbacks stay inside the eligibility filters: record the resolved route
+(alias → model ID, provider, region) per run and fail closed when no allowed route remains. For
+sustained failure, a circuit breaker (closed → open → half-open) stops hammering a down provider; hedged requests (fire a second call after a timeout, take
 whichever returns first) trade cost for tail latency on latency-critical paths.
 
 **The distinctive discipline**: when a fallback degrades quality, say so — never silently, never
@@ -252,6 +285,9 @@ how to deploy one.
 - Every fallback path is classified (retryable vs not) and ordered (same-tier-different-provider
   before same-provider-degraded-tier).
 - No degradation reaches the user silently — the UX names what changed.
+- Eligibility filters (grants, region, data policy, budget) run before any learned router or
+  decision model; the router narrows, never grants. Every fallback route was itself evaluated.
+- Media spend is reported per accepted asset, in the provider's billing unit, at the regular rate.
 - Any open-weight model recommended for a commercial/resold context carries its license flag,
   Llama explicitly.
 - Every $/MTok figure carries a date stamp and a re-verify pointer.
