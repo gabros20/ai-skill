@@ -80,8 +80,8 @@ best-case: one vendor's production aggregate, with its sampling method unstated,
   before tuning VAD.
 - **History holds only what the caller heard.** On barge-in, truncate the unplayed reply. The
   playback primitives belong to `backend` (`surface-realtime.md`
-  "Voice media transport — the substrate under a voice agent"). Measure barge-in as **two opposing error rates**. A *false yield* is stopping for a
-  backchannel or noise. A *swallowed interruption* is talking over a real barge-in. In one
+  "Voice media transport — the substrate under a voice agent"). Measure barge-in as **two
+  opposing error rates**. A *false yield* is stopping for a backchannel or noise. A *swallowed interruption* is talking over a real barge-in. In one
   production baseline, 89% of rule-based barge-ins were false, caused by no intent to interrupt,
   noise, echo, or misplaced turns (arxiv.org/pdf/2205.15060). Fix echo cancellation first, then
   label a sample by cause, then tune thresholds.
