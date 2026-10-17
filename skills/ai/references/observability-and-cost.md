@@ -71,10 +71,9 @@ skills-corpus):
 `llm.response.cost.usd_estimate`); expect to discover the exact field name per instrumentation
 rather than assume a standard one (skills-corpus, elastic donor).
 
-**Telemetry content policy — record references, not content.** The GenAI conventions say
-instrumentations "SHOULD NOT capture" instructions, inputs, and outputs by default and should offer
-an opt-in; for production they recommend storing content externally and recording references on the
-span, so separate access controls apply (open-telemetry/semantic-conventions-genai,
+**Telemetry content policy — record references, not content.** Instrumentations "SHOULD NOT
+capture" instructions, inputs, and outputs by default and should offer an opt-in; in production,
+store content externally and record references on the span, under separate access controls (open-telemetry/semantic-conventions-genai,
 `gen-ai-spans.md` "Capturing instructions, inputs, and outputs", read 2026-10-17). Default: no raw
 prompts, user files, screenshots, or tool payloads in traces; restricted content in its own store
 with its own retention; secrets redacted before emission. Record versions instead — prompt, tool,
@@ -130,11 +129,9 @@ the cost dashboard will misattribute spend.
   each as its own cost line, or a dashboard that multiplies tokens by price undercounts agent
   spend (`retrieval-and-rag.md` §7). Give research and generation runs a per-run ceiling, and
   report agent features as **$ per successful task** (`model-selection-and-routing.md` §1b), not
-  $ per call. Read each meter's unit off its pricing page, because the unit is the trap (all read
-  2026-10-17): a workflow engine can bill every step (Inngest: executions = runs × (steps + 1)); a
-  credential broker can bill per token *request*, not per LLM token (Vercel Connect); media bills
-  per image, megapixel, or second (`model-selection-and-routing.md` §2); a gateway can take a
-  percentage on credit purchases, not per request (OpenRouter).
+  $ per call. Read each meter's unit off its pricing page — the unit is the trap: a workflow engine
+  can bill every step, a credential broker every token *request* (not LLM token), media per image,
+  megapixel, or second, a gateway a percentage on credit purchases (dated examples in `SOURCES.md`).
 - **Billing and audit records are not sampled traces.** Keep usage and audit entries in their own
   durable store, reconcile estimated against billed usage (provider cost stays provisional until
   billed), and sample expensive traces and evals deliberately without sampling away a required
@@ -168,8 +165,7 @@ datasets exportable so a migration stays possible.
 - Every LLM span carries `gen_ai.operation.name`, `gen_ai.request.model`/`response.model`, and
   input/output token counts at minimum.
 - Cache-write and cache-read tokens are tracked as separate fields, not blended.
-- Traces carry no raw prompts, files, screenshots, or tool payloads by default; content capture is
-  an explicit opt-in to a restricted store, and spans record versions and references instead.
+- Traces carry no raw content by default; capture is an explicit opt-in to a restricted store.
 - Usage and audit records live outside sampled traces, and every meter is attributed in its own
   billing unit.
 - Cache-hit-rate appears on the same dashboard as cost and latency, not omitted.

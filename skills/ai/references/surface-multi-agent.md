@@ -108,20 +108,17 @@ before an autonomous role-based crew, not after.
 tools and sources to use, and clear task boundaries" — without them agents duplicate work and leave
 gaps (anthropic.com/engineering/multi-agent-research-system). Make it a typed definition: objective,
 input/output schema, model policy, permitted tools, skill versions, context scope, maximum depth,
-budget, timeout, artifact destination, stop condition. Split a specialist out only when its branch
-needs different instructions, tools, or policy (developers.openai.com/api/docs/guides/agents/
-orchestration).
-- **Grants narrow, never widen**: a child's permissions are a subset of the parent's for that task,
-  and every child draws on the parent run's budget (the reservation itself is `backend`'s
-  `surface-agentic.md` "Durable execution as the default control plane").
+maximum concurrency, budget, timeout, artifact destination, stop condition. Split a specialist out
+only when its branch needs different instructions, tools, or policy (OpenAI orchestration guide).
+- **Grants narrow, never widen**: a child's permissions are a subset of the parent's, and every
+  child draws on the parent run's budget (the reservation is `backend`'s `surface-agentic.md` "Run
+  control: approvals, version pins, budgets, linked lifecycles").
 - **Pass references, not transcripts**: the parent sends task-specific context; the child stores
-  its work as an artifact and returns evidence, uncertainty, receipts, and lightweight references
-  (same Anthropic source).
+  its work as an artifact and returns evidence, uncertainty, receipts, and lightweight references.
 - **Fan out reads; serialize conflicting writes** — parallel workers on a shared resource need a
   lock, a fork-and-merge step, or one writer.
-- **A second model is not independent proof**: review against the requested outcome with
-  validators and tests where they exist, cap repair attempts, then escalate or return a partial
-  result. Peer-agent messages are untrusted input — one compromised agent must not push another past
+- **A second model is not independent proof**: review with validators and tests where they exist,
+  cap repair attempts, then escalate or return a partial result. Peer-agent messages are untrusted input — one compromised agent must not push another past
   its trust boundary (OWASP's "multi-agent chaining" abuse case).
 
 ## Composing with each base surface

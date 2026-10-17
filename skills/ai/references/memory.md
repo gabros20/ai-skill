@@ -73,24 +73,24 @@ emerged, each a defensible default for a different priority:
 Default absent a stronger signal: **start with explicit, user-editable preference records** —
 small, versioned, scoped rows the user can inspect, edit, and delete (§2b) — and add mem0-style
 inferred memory only once a recall eval on your own conversations (§4) shows it recalls usefully
-without storing wrong or excessive facts. Inferred extraction is the cheapest layer to stand up and
-the widest door for memory poisoning, since it writes from untrusted conversation content (§2b); a
-raw chat log is evidence, not a trusted preference. When inferred memory is earned, fact-extraction (mem0) is the first philosophy to try —
-cheapest on infra most teams already have (a vector store). Move to a temporal KG (Graphiti) only when
+without storing wrong or excessive facts. Inferred extraction is the widest door for memory
+poisoning, since it writes from untrusted conversation content (§2b); a raw chat log is evidence,
+not a trusted preference. When inferred memory is earned, fact-extraction (mem0) is the first
+philosophy to try — cheapest on infra most teams already have (a vector store). Move to a temporal KG (Graphiti) only when
 "when did this become true" is a real product requirement; move to self-editing core (Letta) only
 when the agent itself, not a background job, should own memory edits; move to an ontology graph
 (cognee) only when the domain has entity/relation structure worth the modeling cost.
 
 ### 2b. Governed memory — applies to all four philosophies
-Whatever stores the facts, the product governs them. OWASP's AI Agent Security Cheat Sheet defines
-**memory poisoning** as "malicious data persisted in agent memory to influence future sessions or
-other users," and its controls are the floor: validate and sanitize before storing, isolate memory
-between users/sessions, set expiry and size limits, audit for sensitive data before persistence
+Whatever stores the facts, the product governs them. OWASP defines **memory poisoning** as
+"malicious data persisted in agent memory to influence future sessions or other users"; its floor:
+validate and sanitize before storing, isolate users/sessions, set expiry and size limits, audit for
+sensitive data before persistence
 (cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html, read 2026-10-17).
 - **A memory is a record, not a string**: scope, category, value, source message/document ID,
   explicit-vs-inferred origin, created, last confirmed, validity interval, sensitivity, status,
-  superseded-by, schema version. A model's confidence score is not an objective probability —
-  store origin and confirmation instead.
+  superseded-by, schema version. A model's confidence score is not a probability; store origin and
+  confirmation.
 - **A candidate is never automatic authority.** Write path: extract a candidate with its source →
   classify (preference / episode / task state / sensitive) → apply consent, retention, and scope
   rules → conflict check (ask, defer, or quarantine) → version and commit. Sandbox scratch notes
@@ -100,8 +100,8 @@ between users/sessions, set expiry and size limits, audit for sensitive data bef
 - **A current instruction beats a saved preference** for that task without rewriting the record.
 - **Don't infer sensitive traits because you can** — store them only when the user states them for
   a purpose, flagged sensitive.
-- **Forget propagates**: revoke and tombstone the record, then invalidate what was derived from it
-  (vectors, summaries, caches, active contexts) and block restoration from old checkpoints. Erasure
+- **Forget propagates**: tombstone the record, invalidate its derived vectors, summaries, caches,
+  and active contexts, and block restoration from old checkpoints. Erasure
   exceptions are `data`'s `governance-pii-and-retention.md` "GDPR Article 17"; deletion through the
   index is `data`'s `surface-ai-data-plane.md` "RAG corpus as governed ETL".
 - **Procedural memory is gated**: an agent may *propose* a skill or instruction fix after a failure;
@@ -169,10 +169,9 @@ that satisfies the actual recall requirement wins by default.
   not cited as settled science.
 - A project-specific recall eval exists (or is explicitly deferred with a reason), not just a
   vendor benchmark number.
-- Memory starts as explicit preference records; inferred memory is added only after that recall
-  eval, or the earlier start is justified.
-- Every record carries scope (from the authenticated caller), source, origin, validity,
-  sensitivity, and status (§2b).
+- Memory starts as explicit preference records carrying the §2b fields, scope taken from the
+  authenticated caller; inferred memory is added only after that recall eval, or the earlier start
+  is justified.
 - A forget test passes: a deleted fact is gone from records, vectors, summaries, caches, and a
   checkpoint restore; a memory-poisoning case is sanitized, scoped, expired, or rejected before
   persistence (OWASP's abuse-case matrix).

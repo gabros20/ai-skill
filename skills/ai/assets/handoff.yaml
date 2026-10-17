@@ -61,8 +61,9 @@ downstream_requirements:            # mirrors references/handoff.md "What `ai` h
                                     # each entry is a decision or "N/A because …"
   external_action_safety: ""        # backend: write/spend tools, risk class, approval-as-paused-run,
                                     # operation-ledger entries
-  isolated_execution: ""            # backend/operate: tools running generated code, a browser, or
-                                    # untrusted files; egress, credential, persistence needs
+  isolated_execution: ""            # tools running generated code, a browser, or untrusted files;
+                                    # backend: environment adapter + egress/credential/persistence
+                                    # controls; operate: provider, capacity, teardown, template digest
   approval_and_reconnect: ""        # frontend: approval-card action preview, resume after
                                     # disconnect, closing the client never cancels
   scoped_retrieval_and_deletion: "" # data: per-caller sources and memory scopes; what a forget or
