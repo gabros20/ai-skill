@@ -14,7 +14,7 @@ churns monthly), then each request selects one primary job (model-selection-and-
 prompt-and-context-engineering · structured-outputs · tool-and-mcp-integration · agent-construction ·
 retrieval-and-rag · memory · evaluation ⭐ · guardrails-and-safety · observability-and-cost) combined
 with at most one base surface (chat-assistant · autonomous-agent · rag-app · batch-and-pipeline) — plus
-the additive surface-multi-agent overlay when the system is also multi-agent. Only the two or three
+the additive surface-multi-agent overlay when the system is also multi-agent, and the additive surface-voice overlay when it listens and answers in audio. Only the two or three
 references a route needs are read, never the whole pack. Three stances make it distinct: evaluation is
 the flagship — the completion gate (error-analysis-first dataset, aligned binary judge, pass^k), not an
 afterthought; it verifies-and-subtracts — prune the harness, budget tokens, decompose the judge,
@@ -52,12 +52,13 @@ Primary jobs (pick one):
 - `guardrails-and-safety.md` — moderation, rails, validators, code-exec guards, approval gates, red-team; uniform 5-way controls table (control→impl→verified) + self-audit, validate-the-guardrail-like-a-judge.
 - `observability-and-cost.md` — AI cost + behavior telemetry: OTel-GenAI `gen_ai.*` semconv (vendor-neutral), cache-as-architecture, cost-lever ordering (cascade→cache→batch), license-pattern read.
 
-Surface overlays (add at most one base; surface-multi-agent is additive):
+Surface overlays (add at most one base; surface-multi-agent and surface-voice are additive):
 - `surface-chat-assistant.md` — default / start-simplest: streaming, conversational, human-in-loop; single-call-before-loop default, session-scoped memory, online-eval fit, lighter guardrail posture.
 - `surface-autonomous-agent.md` — long-horizon loop, tools, runs unattended; compaction/JIT/note-taking/sub-agent isolation as structural, harness-hygiene on every model upgrade, approval-gate default, durable-execution border, pass^k.
 - `surface-rag-app.md` — retrieval-centric, grounded, citation-bearing; retrieval-and-rag is the spine, citations as a schema contract, cite-or-retract as the load-bearing guardrail, index-staleness as a monitored failure.
 - `surface-batch-and-pipeline.md` — offline classify/extract at scale, no human in loop; cheap-tier routing default, cost-lever ordering (cascade→batch-50%→cache→effort-floor), schema-heavy output, offline/regression eval only.
 - `surface-multi-agent.md` — FLAGSHIP, additive: orchestrated specialists on top of a base shape (not swarms) — orchestrator + tool-scoped specialists, the honest when-NOT-to-multi-agent (coordination cost, ~15× tokens), four shapes, per-base composition. Stacks on, does not replace.
+- `surface-voice.md` — additive: systems that listen and answer in audio (voice assistants, phone agents) — cascade vs speech-to-speech vs hybrid, turn-taking and the latency budget, speech components by language/finalization/billing unit, evals at the caller's ear, call guardrails, licence flags.
 
 Pipeline:
 - `handoff.md` — standalone vs pipeline behavior and the `handoff.yaml` companion (with `volatile_facts`) consumed by quality, operate, backend, frontend, and data.

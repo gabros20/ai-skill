@@ -67,13 +67,13 @@ Pipecat is a BSD-2 Python framework, copyrighted and maintained by Daily. Its mo
 **Pipecat Cloud pricing (daily.co, fetched 2026-10-17)**
 - Hosting per active minute: agent-1x (0.5 vCPU / 1 GB) $0.01; agent-2x (1 vCPU / 2 GB) $0.02; agent-3x (1.5 vCPU / 3 GB) $0.03. "Reserved" (always-on, warm) instances cost $0.0005, $0.0010 and $0.0015 per minute respectively. Concurrency: "Unlimited" — [Daily: Pipecat Cloud pricing](https://www.daily.co/pricing/pipecat-cloud/)
 - Transport: Daily WebRTC voice is "Free for 1:1 voice sessions" (a $0.001 figure is also shown; the page doesn't make the relationship clear). Voice+video is $0.004 per participant-minute. WebSocket is billed by your provider — [Daily: Pipecat Cloud pricing](https://www.daily.co/pricing/pipecat-cloud/)
-- Telephony: Daily SIP dial-in/out $0.003–$0.02/min; Daily PSTN $0.018/min (SIP included; transcoding extra); SIP REFER $0.20 per event, and "the original call stays anchored to Daily", so minutes keep accruing during the transfer; Twilio billed by Twilio — [Daily: Pipecat Cloud pricing](https://www.daily.co/pricing/pipecat-cloud/)
+- Telephony: Daily SIP dial-in/out $0.003–$0.02/min; Daily PSTN $0.018/min (SIP included; transcoding extra); SIP REFER $0.20 per event; on a bridged transfer "the original call stays anchored to Daily", so minutes keep accruing, while a SIP REFER removes Daily once the handoff succeeds (corrected 2026-10-17); Twilio billed by Twilio — [Daily: Pipecat Cloud pricing](https://www.daily.co/pricing/pipecat-cloud/)
 - Krisp VIVA noise cancellation is free up to 10k active session-minutes/month, then $0.0015/min. Recording: audio $0.005/min, A/V $0.01349/min, storage $0.003/min. LLM/STT/TTS are billed by each provider ("bundled inference billing" available for enterprise) — [Daily: Pipecat Cloud pricing](https://www.daily.co/pricing/pipecat-cloud/)
 
 ### Inferences
 - Pipecat's centre of gravity is a single vendor (Daily holds the copyright, offers support and runs the cloud), but the code is vendor-neutral. It ships LiveKit, Vonage and SmallWebRTC transports, so you can self-host Pipecat without Daily, and you can even run it on LiveKit's media layer.
 - Folding Flows into core removes the version-matching problem that existed before 1.5.0. Teams on pre-1.5 Pipecat with the separate `pipecat-ai-flows` package have a small migration (import rename). Teams still on 0.0.x need a bigger one across the 1.0 boundary. A fast cadence with breaking changes in minor versions (as in 1.10.0) means you should pin versions in production.
-- The SIP REFER detail matters for cost modelling. On Pipecat Cloud with Daily telephony, a "transferred" call keeps billing because the media stays anchored.
+- The transfer type matters for cost modelling. On Pipecat Cloud with Daily telephony, a bridged transfer keeps billing because the media stays anchored; a SIP REFER hands the call off and stops Daily billing (corrected 2026-10-17 — the first version had this backwards).
 
 ### Gaps
 - No primary-source list of production Pipecat customers was fetched. The named users above come from a search snippet.
@@ -204,7 +204,7 @@ The recurring verdict, mostly from vendor and consultancy blogs and one analyst,
 - Pipecat and LiveKit aren't strictly either/or. Pipecat ships a LiveKit WebRTC transport (backed by `@pipecat-ai/livekit-transport` 1.0.0 on the client side) — [Pipecat README](https://github.com/pipecat-ai/pipecat); [Pipecat CHANGELOG](https://github.com/pipecat-ai/pipecat/blob/main/CHANGELOG.md)
 
 ### Inferences
-- The lock-in points worth naming in a decision record: (1) the LiveKit turn-detector licence, which binds the model to LiveKit Agents; (2) LiveKit Cloud-only features (adaptive interruption is the default on Cloud, plus the simulations and observability products); (3) Daily-anchored telephony on Pipecat Cloud (SIP REFER keeps billing); (4) Flows and workflow definitions, which are framework-specific DSLs, although Pipecat's new `FlowConfig` YAML/JSON schema makes flows more portable as data.
+- The lock-in points worth naming in a decision record: (1) the LiveKit turn-detector licence, which binds the model to LiveKit Agents; (2) LiveKit Cloud-only features (adaptive interruption is the default on Cloud, plus the simulations and observability products); (3) Daily-anchored telephony on Pipecat Cloud (a bridged transfer keeps billing; SIP REFER stops it — corrected 2026-10-17); (4) Flows and workflow definitions, which are framework-specific DSLs, although Pipecat's new `FlowConfig` YAML/JSON schema makes flows more portable as data.
 - Most comparison content is written by parties with a commercial stake (LiveKit, Daily-adjacent, Chanl, Inworld, AssemblyAI, Plivo). The only independent assessments found were Thoughtworks and, partly, WebRTC.ventures (a consultancy that may sell implementation services on both).
 
 ### Gaps

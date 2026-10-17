@@ -402,15 +402,15 @@
       </div>
     </div>
     <div class="rlane">
-      <div class="rlabel">③ multi-agent overlay<small>additive ⭐</small></div>
+      <div class="rlabel">③ additive overlays<small>multi-agent ⭐ · voice</small></div>
       <div class="chips">
-        <span class="chip dimon">surface-multi-agent</span><span class="chip" style="border-style:dashed">stacks on top — never replaces</span>
+        <span class="chip dimon">surface-multi-agent</span><span class="chip dimon">surface-voice</span><span class="chip" style="border-style:dashed">stacks on top — never replaces</span>
       </div>
     </div>
     <div class="rdown"><span>compose →</span></div>
     <div class="readset">
       <code>evaluation.md</code><code>surface-rag-app.md</code><code class="dim">surface-multi-agent.md</code>
-      <span class="cnt"><b>3 of 16</b> loaded · read fully</span>
+      <span class="cnt"><b>3 of 17</b> loaded · read fully</span>
     </div>
     <p class="rrule"><svg class="lu" aria-hidden="true"><use href="#lu-route"/></svg><span><b>Route before acting.</b> Pick one job and at most one base surface, read only those references — never the whole library. When the system is <i>also</i> multi-agent, <code>surface-multi-agent</code> stacks additively on top of the base surface; it does not replace it.</span></p>
   </div>
@@ -464,7 +464,7 @@
   how the job applies to the deployment shape, plus the <b>additive multi-agent overlay</b> when the
   system is also multi-agent. Read the selected references completely; load two or three at most,
   never the whole pack. Ten jobs and five surfaces compose across deployment shapes without ever
-  reading all sixteen references at once.</p>
+  reading all seventeen references at once.</p>
   <div class="tblwrap"><table>
     <tr><th>facet</th><th>options</th><th>rule</th></tr>
     <tr>
@@ -481,6 +481,11 @@
       <td class="job">③ Multi-agent overlay <span style="color:var(--amber)">⭐</span></td>
       <td class="dim">surface-multi-agent — orchestrated specialists on top of a base shape</td>
       <td class="canon"><b>Additive.</b> Stacks <i>on top of</i> the base surface, never replaces it. A multi-agent RAG app is rag-app <b>+</b> multi-agent.</td>
+    </tr>
+    <tr>
+      <td class="job">④ Voice overlay</td>
+      <td class="dim">surface-voice — the system listens and answers in audio (voice assistants, phone agents)</td>
+      <td class="canon"><b>Additive.</b> Stacks on chat-assistant for live voice or on autonomous-agent for call agents: cascade vs speech-to-speech, turn-taking, evals at the caller's ear.</td>
     </tr>
   </table></div>
   <div class="note"><b>Retrieval-first before any code — or any model name.</b> The model/SDK/price/spec
@@ -825,7 +830,7 @@ git clone https://github.com/gabros20/ai-skill &amp;&amp; cd ai-skill
   <details class="disc">
     <summary>what's in the repo</summary>
     <div>
-      <div class="files"><span class="hl">skills/ai/</span>                <span class="d">the skill: SKILL.md (router) + 16 references/ + assets/</span>
+      <div class="files"><span class="hl">skills/ai/</span>                <span class="d">the skill: SKILL.md (router) + 17 references/ + assets/</span>
 <span class="hl">docs/</span>                      <span class="d">installation · usage · recipes</span>
 <span class="hl">site/</span>                      <span class="d">this guide — deploys to aiengskill.vercel.app</span>
 install.sh                 <span class="d">installer (claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all)</span>
