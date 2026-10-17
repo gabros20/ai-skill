@@ -136,7 +136,7 @@ at list prices dated at the vendor's page.
   ASR/TTS regressions. Provider defaults change underneath you, so run the audio suite on a schedule.
 - **Calibrate the judge on audio** against a human-labeled sample of your own calls before you trust
   a simulation tool's score ([evaluation](evaluation.md) §2). The independent gate is `quality`'s
-  (`surface-ai-system.md` "Judge validity").
+  (`surface-ai-system.md` "Voice: evidence at the caller's ear").
 
 ### 6. Guardrails on a call
 - **Disclose AI at the first interaction**, using a pre-rendered or cached greeting, never one
@@ -186,8 +186,11 @@ per-turn evals, observability) in the decision record as lock-in too.
   detector (§3).
 - **Handoffs.** Transport, codecs, and reconnect plumbing go to `backend` (`surface-realtime.md`
   "Voice media transport — the substrate under a voice agent").
-  Per-minute cost, concurrency, the latency SLI, and recording retention go to `operate`
-  (`surface-ai-system.md` "Time-to-first-token is a distinct SLI from total duration").
+  To `operate`: the latency SLI (`surface-ai-system.md` "Time-to-first-token is a distinct
+  SLI from total duration"), per-minute cost and concurrency (`capacity-and-cost.md` "The
+  2020s-specific version: agent and LLM spend scales with activity, not users"), and recording
+  retention and redaction (`observability.md` "AI-system observability — same discipline, one
+  new signal").
   Build-vs-buy of a voice platform goes to `architecture` (`surface-agentic.md` "Runtime
   ownership — build vs buy, thin clients, separate lifecycles"). Disclosure and consent go to
   `success` and `marketing`.
