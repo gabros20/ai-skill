@@ -43,11 +43,12 @@ Before producing anything the user will have to live with:
    answers that would change it most.
 6. **Write it down.** Answers and assumptions go to the LEDGER's Context block.
 
-This pack's questions:
+This pack's questions (a pool — ask the top four that step 1 left open):
 1. What does a wrong answer cost here: a shrug, a refund, or real harm? (Recommended: treat it as
    costly; a person approves anything that acts.)
 2. Do real example inputs exist, with answers you would call good? (Recommended: collect them first;
-   they seed [Evaluation](references/evaluation.md) "1. Error-analysis-first".)
+   they seed [Evaluation](references/evaluation.md) "1. Error-analysis-first — spend 60–80% of eval
+   effort here".)
 3. Limits on response time, cost per call, or where data may be sent? (Recommended: no customer data
    to a provider that trains on it.)
 4. Which model providers are you already using or bound to? (Read the repo first.)
@@ -145,9 +146,8 @@ they point to the job references, they don't redefine them.
 
 1. Inspect the request, the codebase, and any upstream artifacts (contracts, NFR budgets, threat
    model, a `handoff.yaml`); record material assumptions and unresolved inputs with owners.
-2. Route (above): one primary job, ≤1 base surface, `surface-multi-agent` / `surface-voice` stacked
-   additively if the system is multi-agent or spoken. Re-verify volatile model/SDK facts before any model-specific code; read
-   selected refs fully.
+2. Route (above), overlays stacked additively. Re-verify volatile model/SDK facts before any
+   model-specific code; read selected refs fully.
 3. Produce the artifact grounded in what the reference names — concrete pick + what-NOT + trade-off,
    capped at 3–5 decisions per pass, subtracting where the simpler thing wins.
 4. Prove it with an eval appropriate to the surface (offline/online/regression/safety; pass^k for
