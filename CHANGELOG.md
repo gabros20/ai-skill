@@ -8,7 +8,14 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- SKILL.md **Standalone context check** (before routing): the family's common core (look first,
+  size it, ask at most four owner-only questions with recommended answers, decide as the expert,
+  never block, record in the LEDGER) and four ai questions (cost of a wrong answer, real examples
+  with good answers, latency/cost/data-location limits, providers already in use); real examples
+  seed `evaluation.md` "1. Error-analysis-first". Offset to stay under the 3,500-token threshold
+  (3353 → 3489): the mission's and the border invariant's restated substrate lists now point to
+  "Not this skill", and the Resources job/surface lists that repeated the routing tables are cut.
+  Output eval `standalone-context-check`.
 
 ## [0.4.1] — 2026-10-17
 

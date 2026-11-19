@@ -121,5 +121,15 @@
       "Puts AI disclosure, opt-out, spell-back of meter readings, and human handoff outside the model, and points the legal rules to success/marketing and the transport to backend",
       "Every vendor, model, language-coverage, or price fact is date-stamped with a re-verify instruction"
     ]
+  },
+  {
+    "id": "standalone-context-check",
+    "prompt": "Add an AI assistant to our app that answers customer questions about their orders.",
+    "assertions": [
+      "Before building it reads the repo and any digital-product/LEDGER.md Context, and asks nothing the repo already answers (providers and SDKs in use).",
+      "It asks at most four questions in one round (for example what a wrong answer costs, whether real example questions with good answers exist, limits on latency, cost or where data may go), each with a recommended answer — or, if it cannot ask, proceeds and opens the result with the assumptions that would change it most.",
+      "It treats any example inputs as the seed of the eval set, and defaults to a person approving any action that changes an order.",
+      "Answers and assumptions are recorded in the LEDGER's Context block, each assumption with its basis and cost to reverse."
+    ]
   }
 ]

@@ -19,17 +19,38 @@ comes from a model. Own the *cognition*: model choice and routing, the prompt/co
 structured outputs, tool and MCP consumption, the agent loop, retrieval behavior, memory, evals,
 guardrails, and AI-specific cost/observability. Own the intelligence, not the substrate it runs on.
 
-The border — with `architecture` (system shape, NFR budgets, threat model, build-vs-buy), `backend`
-(serving substrate: MCP/tool *endpoints*, vector-store-as-served, gateways, durable-execution
-infra), `data` (governed pipelines + the vector store *as a dataset*), `frontend` (chat UI and
-streaming *render*), `quality` (independent verification / red-team *gate*), `operate` (deploy and
-the monitoring *platform*), and `automation` (deterministic multi-system workflows, even when one
-step calls a model) — is enumerated in the routing decline-rows and invariants below. `ai`
+The border with `architecture`, `backend`, `data`, `frontend`, `quality`, `operate` and
+`automation` is enumerated in "Not this skill" below. `ai`
 *references* those substrates; it does not re-teach or override them. Operate independently when
 invoked alone; when compatible upstream artifacts exist (a solution-architecture doc, contracts, an
 NFR budget, a threat model, a `handoff.yaml`), build inside them rather than re-deriving. Recommend
 adjacent skills when useful; never invoke them automatically unless the user explicitly requested a
 composition workflow.
+
+## Standalone context check
+
+Before producing anything the user will have to live with:
+1. **Look first.** Read `digital-product/LEDGER.md` (Context), `digital-product/<pack>/`, upstream
+   artifacts, the repo and this conversation. A fact found is never asked; a fact recorded is never
+   re-asked.
+2. **Size it.** Reversible and small → proceed, stating assumptions. New, costly or hard to undo →
+   check.
+3. **Ask only what the owner alone knows**, in their words: one round, at most four, highest
+   leverage first, each with a recommended answer ("ok" accepts all). Two rounds at most.
+4. **No or thin answers → decide as the expert.** Record each assumption with its basis and cost to
+   reverse; prefer the reversible option; show the cheapest proof early.
+5. **No way to ask → never block.** Proceed, and open the artifact with the assumptions and the
+   answers that would change it most.
+6. **Write it down.** Answers and assumptions go to the LEDGER's Context block.
+
+This pack's questions:
+1. What does a wrong answer cost here: a shrug, a refund, or real harm? (Recommended: treat it as
+   costly; a person approves anything that acts.)
+2. Do real example inputs exist, with answers you would call good? (Recommended: collect them first;
+   they seed [Evaluation](references/evaluation.md) "1. Error-analysis-first".)
+3. Limits on response time, cost per call, or where data may be sent? (Recommended: no customer data
+   to a provider that trains on it.)
+4. Which model providers are you already using or bound to? (Read the repo first.)
 
 ## Route before acting
 
@@ -97,13 +118,9 @@ they point to the job references, they don't redefine them.
   `npm view`/PyPI, HF model cards, the spec changelog). Teach and practice the *method* of staying
   current; never freeze a volatile fact. Carry `volatile_facts` into the handoff so a frozen value
   can't leak downstream un-caveated.
-- **Implement inside the decision (the border).** Own the cognition, not the boundary/NFR/threat
-  *decision* (→ `architecture`), the serving substrate — MCP/tool endpoints, vector-store-as-served,
-  gateways, durable-execution infra (→ `backend`), the governed pipeline + vector store as dataset
-  (→ `data`), the chat UI/streaming render (→ `frontend`), the independent verification gate
-  (→ `quality`), the deploy/monitoring platform (→ `operate`), or deterministic multi-system
-  workflows (→ `automation`). Consume upstream artifacts; when none exist (standalone run), say so
-  rather than inventing a contract or threat model.
+- **Implement inside the decision (the border).** Own the cognition, not the decisions and
+  substrates the "Not this skill" rows route away. Consume upstream artifacts; when none exist
+  (standalone run), say so rather than inventing a contract or threat model.
 - **Verify-and-subtract, not just assemble.** Every recommendation names what to build, **what NOT
   to build, and what to remove.** Prune the harness on each model upgrade; better models need *less*
   scaffolding. Cap each pass at 3–5 decisions. The field is loud on adding and silent on pruning —
@@ -164,15 +181,9 @@ Before completion:
 
 ## Resources
 
-Load only what the selected route requires; never preload. The routing tables above name each
-reference's contribution — this is the index.
+Load only what the selected route requires; never preload. The routing tables above are the index
+of the [references/](references/), with each one's contribution.
 
-- **Primary jobs** ([references/](references/)): model-selection-and-routing · prompt-and-context-
-  engineering · structured-outputs · tool-and-mcp-integration · agent-construction · retrieval-and-
-  rag · memory · evaluation ⭐ · guardrails-and-safety · observability-and-cost.
-- **Surface overlays** ([references/](references/)): surface-chat-assistant (default) ·
-  surface-autonomous-agent · surface-rag-app · surface-batch-and-pipeline · surface-multi-agent ⭐
-  (additive) · surface-voice (additive).
 - **Pipeline:** [handoff](references/handoff.md) — standalone vs pipeline behavior and the
   `handoff.yaml` companion (with `volatile_facts`) consumed by `quality`, `operate`, `backend`,
   `frontend`, and `data`.
