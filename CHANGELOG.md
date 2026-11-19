@@ -10,6 +10,12 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ### Added
 - Queue unreleased changes here.
 
+## [0.5.1] — 2026-11-19
+
+### Fixed
+- `.codex-plugin/plugin.json` homepage points at the pack's own site, aiengskill.vercel.app
+  (ai-skill.vercel.app belongs to someone else).
+
 ## [0.5.0] — 2026-11-19
 
 ### Added
@@ -136,6 +142,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   language-agnostic; consumes architecture's contracts/threat-model and hands running behavior +
   eval suites + telemetry to `quality`/`operate`.
 
+[0.5.1]: https://github.com/gabros20/ai-skill/releases/tag/v0.5.1
 [0.5.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.5.0
 [0.4.1]: https://github.com/gabros20/ai-skill/releases/tag/v0.4.1
 [0.4.0]: https://github.com/gabros20/ai-skill/releases/tag/v0.4.0

@@ -1,12 +1,12 @@
 {
   "name": "ai-skill",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Build model-powered behavior: agents, retrieval, evals, and guardrails",
   "author": {
     "name": "gabros20",
     "url": "https://github.com/gabros20"
   },
-  "homepage": "https://ai-skill.vercel.app",
+  "homepage": "https://aiengskill.vercel.app",
   "repository": "https://github.com/gabros20/ai-skill",
   "license": "MIT",
   "keywords": [
